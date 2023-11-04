@@ -2,7 +2,7 @@ import { expect, test } from "vitest"
 
 import { createRoutes } from "./manager"
 
-const pageList1 = [
+const pageList0 = [
   {
     routePath: "/",
     filePath: "src/pages/layout.tsx",
@@ -110,7 +110,7 @@ const pageList1 = [
   },
 ]
 
-const pageList2 = [
+const pageList1 = [
   {
     routePath: "/a",
     filePath: "src/pages/a/page.tsx",
@@ -134,7 +134,7 @@ const pageList2 = [
   },
 ]
 
-const NO_ROOT_LAYOUT3 = [
+const NO_ROOT_LAYOUT2 = [
   {
     routePath: "/a",
     filePath: "src/pages/a/page.tsx",
@@ -166,9 +166,9 @@ const NO_ROOT_LAYOUT3 = [
 ]
 
 const testGroup = {
-  pageList1,
-  pageList2,
-  "no-root-layout": NO_ROOT_LAYOUT3,
+  pageList1: pageList0,
+  pageList2: pageList1,
+  "no-root-layout": NO_ROOT_LAYOUT2,
 }
 
 Object.entries(testGroup).forEach(([key, value], index) => {
