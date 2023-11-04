@@ -218,44 +218,95 @@ export async function parsePageMeta(filePath: string, fileContent: string) {
   return {}
 }
 
-function createRoutes(pages: Page[]): Route[] {
+const layoutFileLength = "layout.tsx".length
+const pageFileLength = "page.tsx".length
+
+export function createRoutes(pages: Page[]): Route[] {
   const routes: Route[] = []
-  const layoutRouteStack: Route[] = []
 
-  for (const page of pages) {
-    const route = {
-      path: page.routePath,
-      filePath: page.filePath,
-      component: path.join("/", page.filePath),
-      children: page.isLayout ? [] : undefined,
-      meta: page.meta,
-    } as Route
-
-    while (layoutRouteStack.length) {
-      const layout = layoutRouteStack[layoutRouteStack.length - 1]
-
-      // - root layout
-      // - same level layout
-      // - sub level layout
-      if (
-        layout.path === "/" ||
-        layout.path === route.path ||
-        route.path.startsWith(layout.path + "/")
-      ) {
-        layout.children?.push(route)
-        break
+  const pagesWithDepth = pages
+    .map((page) => ({
+      ...page,
+      depth: page.routePath.split("/").filter(Boolean).length + 1,
+    }))
+    .toSorted((a, b) => {
+      if (a.depth !== b.depth) {
+        return a.depth - b.depth
       }
 
-      layoutRouteStack.pop()
-    }
+      if (!a.isLayout && !b.isLayout) {
+        return a.filePath.length - b.filePath.length
+      }
 
-    if (!layoutRouteStack.length) {
-      routes.push(route)
-    }
+      if (a.isLayout && !b.isLayout) {
+        return -1
+      }
 
-    if (page.isLayout) {
-      layoutRouteStack.push(route)
+      if (!a.isLayout && b.isLayout) {
+        return 1
+      }
+
+      return a.filePath.length - b.filePath.length
+    })
+
+  const maxDepth = pagesWithDepth[pagesWithDepth.length - 1].depth
+  let currentDepth = 1
+  let currentParent: Route | null = null
+  let currentGrandParent: Route | null = null
+
+  while (currentDepth <= maxDepth) {
+    for (const page of pagesWithDepth) {
+      if (page.depth !== currentDepth) {
+        continue
+      }
+
+      const route = {
+        path: page.routePath,
+        filePath: page.filePath,
+        component: path.join("/", page.filePath),
+        children: page.isLayout ? [] : undefined,
+        meta: page.meta,
+      } as Route
+
+      if (currentDepth === 1) {
+        if (routes.length === 0) {
+          routes.push(route)
+          currentParent = route
+          currentGrandParent = null
+        } else {
+          routes[0].children?.push(route)
+          if (page.isLayout) {
+            currentParent = route
+            currentGrandParent = routes[0]
+          }
+        }
+      } else {
+        if (
+          currentParent?.filePath.slice(0, -layoutFileLength) ===
+          route.filePath.slice(
+            0,
+            -(
+              (page.isLayout ? layoutFileLength : pageFileLength) +
+              route.path.length
+            ),
+          )
+        ) {
+          currentParent.children?.push(route)
+          if (page.isLayout) {
+            currentGrandParent = currentParent
+            currentParent = route
+          }
+        } else {
+          if (currentGrandParent?.children) {
+            currentGrandParent.children.push(route)
+            if (page.isLayout) {
+              currentParent = route
+            }
+          }
+        }
+      }
     }
+    currentDepth++
   }
 
   return routes

@@ -31,12 +31,14 @@
     "@planet-matrix/eslint-config": "^0.5.11",
     "@planet-matrix/prettier-config": "^0.2.4",
     "@types/node": "^20.8.10",
+    "@vitest/ui": "^0.34.6",
     "bumpp": "^9.2.0",
     "eslint": "^8.52.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.5",
     "tsx": "^3.14.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   }
 }
