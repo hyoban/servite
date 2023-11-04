@@ -1,5 +1,5 @@
 {
-  "name": "@hyoban/servite",
+  "name": "servite",
   "version": "0.2.3",
   "description": "A vite plugin for React SSR / SSG / CSR",
   "keywords": [

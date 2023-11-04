@@ -75,9 +75,6 @@ importers:
       '@docsearch/react':
         specifier: ^3.5.2
         version: 3.5.2(@algolia/client-search@4.20.0)(@types/react@18.2.34)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.9.0)
-      '@hyoban/servite':
-        specifier: workspace:*
-        version: link:../servite
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.0.0(@types/react@18.2.34)(react@18.2.0)
@@ -93,6 +90,9 @@ importers:
       react-transition-group:
         specifier: ^4.4.5
         version: 4.4.5(react-dom@18.2.0)(react@18.2.0)
+      servite:
+        specifier: workspace:*
+        version: link:../servite
       tailwindcss:
         specifier: ^3.3.5
         version: 3.3.5
@@ -161,15 +161,15 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@hyoban/servite':
-        specifier: workspace:*
-        version: link:../../servite
       '@types/react':
         specifier: ^18.2.34
         version: 18.2.34
       '@types/react-dom':
         specifier: ^18.2.14
         version: 18.2.14
+      servite:
+        specifier: workspace:*
+        version: link:../../servite
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -179,15 +179,15 @@ importers:
 
   packages/playground/csr:
     dependencies:
-      '@hyoban/servite':
-        specifier: workspace:*
-        version: link:../../servite
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      servite:
+        specifier: workspace:*
+        version: link:../../servite
     devDependencies:
       '@types/react':
         specifier: ^18.2.34
@@ -214,15 +214,15 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2(@babel/core@7.23.2)(react@18.2.0)
     devDependencies:
-      '@hyoban/servite':
-        specifier: workspace:*
-        version: link:../../servite
       '@types/react':
         specifier: ^18.2.34
         version: 18.2.34
       '@types/react-dom':
         specifier: ^18.2.14
         version: 18.2.14
+      servite:
+        specifier: workspace:*
+        version: link:../../servite
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
