@@ -263,30 +263,30 @@ function findParentRoute(routes: Route[], currentRoute: Route): Route | null {
 export function createRoutes(pages: Page[]): Route[] {
   const routes: Route[] = []
 
-  const pagesWithDepth = pages
-    .map((page) => ({
-      ...page,
-      depth: page.routePath.split("/").filter(Boolean).length + 1,
-    }))
-    .toSorted((a, b) => {
-      if (a.depth !== b.depth) {
-        return a.depth - b.depth
-      }
+  const pagesWithDepth = pages.map((page) => ({
+    ...page,
+    depth: page.routePath.split("/").filter(Boolean).length + 1,
+  }))
 
-      if (!a.isLayout && !b.isLayout) {
-        return a.filePath.length - b.filePath.length
-      }
+  pagesWithDepth.sort((a, b) => {
+    if (a.depth !== b.depth) {
+      return a.depth - b.depth
+    }
 
-      if (a.isLayout && !b.isLayout) {
-        return -1
-      }
-
-      if (!a.isLayout && b.isLayout) {
-        return 1
-      }
-
+    if (!a.isLayout && !b.isLayout) {
       return a.filePath.length - b.filePath.length
-    })
+    }
+
+    if (a.isLayout && !b.isLayout) {
+      return -1
+    }
+
+    if (!a.isLayout && b.isLayout) {
+      return 1
+    }
+
+    return a.filePath.length - b.filePath.length
+  })
 
   for (const page of pagesWithDepth) {
     const route = {
