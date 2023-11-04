@@ -110,11 +110,39 @@ const pageList0 = [
   },
 ]
 
-const pageList1 = [
+const ROOT_WITH_GROUP1 = [
+  {
+    routePath: "/c/d",
+    filePath: "src/pages/(group)/c/d/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/c",
+    filePath: "src/pages/(group)/c/layout.tsx",
+    isLayout: true,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/c",
+    filePath: "src/pages/(group)/c/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
   {
     routePath: "/a",
     filePath: "src/pages/a/page.tsx",
     isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/c",
+    filePath: "src/pages/(group)/c/layout.tsx",
+    isLayout: true,
     is404: false,
     meta: {},
   },
@@ -167,7 +195,7 @@ const NO_ROOT_LAYOUT2 = [
 
 const testGroup = {
   pageList1: pageList0,
-  pageList2: pageList1,
+  pageList2: ROOT_WITH_GROUP1,
   "no-root-layout": NO_ROOT_LAYOUT2,
 }
 
