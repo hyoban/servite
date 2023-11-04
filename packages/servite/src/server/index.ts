@@ -2,15 +2,9 @@ import { defineCachedEventHandler } from "#internal/nitro"
 import { defineEventHandler, getQuery, isMethod, readBody } from "h3"
 
 import type { H3Event } from "h3"
-import type { NitroRuntimeConfig } from "nitropack"
 import type { FetchOptions } from "ofetch"
 
-export * from "#internal/nitro"
 export * from "h3"
-
-export declare function useRuntimeConfig<
-  T extends NitroRuntimeConfig = NitroRuntimeConfig,
->(event?: H3Event): T
 
 export interface ApiHandler<Args extends Record<string, any>, Result = any> {
   (params: Args, event: H3Event): Result | Promise<Result>
