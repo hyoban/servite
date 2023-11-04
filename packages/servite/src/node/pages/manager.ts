@@ -218,8 +218,49 @@ export async function parsePageMeta(filePath: string, fileContent: string) {
   return {}
 }
 
-const layoutFileLength = "layout.tsx".length
-const pageFileLength = "page.tsx".length
+function depth(route: Route) {
+  return route.path.split("/").filter(Boolean).length
+}
+
+function getRouteGroup(str: string) {
+  // /src/pages/(admin)/layout.tsx -> admin
+  const m = str.match(/\/\((.*?)\)/)
+  return m?.[1]
+}
+
+function findParentRoute(routes: Route[], currentRoute: Route): Route | null {
+  for (const route of routes) {
+    if (route.children !== undefined) {
+      const result = findParentRoute(route.children, currentRoute)
+      if (result) {
+        return result
+      }
+    }
+    if (
+      route.path === currentRoute.path &&
+      route.children &&
+      currentRoute.children
+    ) {
+      return route
+    }
+
+    if (
+      depth(route) + 1 == depth(currentRoute) &&
+      getRouteGroup(route.filePath) === getRouteGroup(currentRoute.filePath)
+    ) {
+      return route
+    }
+
+    if (
+      depth(route) == depth(currentRoute) &&
+      route.children &&
+      currentRoute.children === undefined
+    ) {
+      return route
+    }
+  }
+  return null
+}
 
 export function createRoutes(pages: Page[]): Route[] {
   const routes: Route[] = []
@@ -249,64 +290,21 @@ export function createRoutes(pages: Page[]): Route[] {
       return a.filePath.length - b.filePath.length
     })
 
-  const maxDepth = pagesWithDepth[pagesWithDepth.length - 1].depth
-  let currentDepth = 1
-  let currentParent: Route | null = null
-  let currentGrandParent: Route | null = null
+  for (const page of pagesWithDepth) {
+    const route = {
+      path: page.routePath,
+      filePath: page.filePath,
+      component: path.join("/", page.filePath),
+      children: page.isLayout ? [] : undefined,
+      meta: page.meta,
+    } as Route
 
-  while (currentDepth <= maxDepth) {
-    for (const page of pagesWithDepth) {
-      if (page.depth !== currentDepth) {
-        continue
-      }
-
-      const route = {
-        path: page.routePath,
-        filePath: page.filePath,
-        component: path.join("/", page.filePath),
-        children: page.isLayout ? [] : undefined,
-        meta: page.meta,
-      } as Route
-
-      if (currentDepth === 1) {
-        if (routes.length === 0) {
-          routes.push(route)
-          currentParent = route
-          currentGrandParent = null
-        } else {
-          routes[0].children?.push(route)
-          if (page.isLayout) {
-            currentParent = route
-            currentGrandParent = routes[0]
-          }
-        }
-      } else {
-        if (
-          currentParent?.filePath.slice(0, -layoutFileLength) ===
-          route.filePath.slice(
-            0,
-            -(
-              (page.isLayout ? layoutFileLength : pageFileLength) +
-              route.path.length
-            ),
-          )
-        ) {
-          currentParent.children?.push(route)
-          if (page.isLayout) {
-            currentGrandParent = currentParent
-            currentParent = route
-          }
-        } else {
-          if (currentGrandParent?.children) {
-            currentGrandParent.children.push(route)
-            if (page.isLayout) {
-              currentParent = route
-            }
-          }
-        }
-      }
+    const parentRoute = findParentRoute(routes, route)
+    if (!parentRoute) {
+      routes.push(route)
+    } else {
+      parentRoute.children?.push(route)
     }
-    currentDepth++
   }
 
   return routes
