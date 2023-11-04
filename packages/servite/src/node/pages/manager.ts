@@ -236,25 +236,23 @@ function findParentRoute(routes: Route[], currentRoute: Route): Route | null {
         return result
       }
     }
-    if (
-      route.path === currentRoute.path &&
-      route.children &&
-      currentRoute.children
-    ) {
+
+    if (route.path === currentRoute.path && route.children) {
       return route
     }
 
     if (
       route.children &&
+      getRouteGroup(route.filePath) &&
       getRouteGroup(route.filePath) === getRouteGroup(currentRoute.filePath)
     ) {
       return route
     }
 
     if (
-      depth(route) == depth(currentRoute) &&
       route.children &&
-      currentRoute.children === undefined
+      !getRouteGroup(route.filePath) &&
+      depth(route) + 1 === depth(currentRoute)
     ) {
       return route
     }

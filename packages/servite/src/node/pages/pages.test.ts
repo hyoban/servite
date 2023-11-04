@@ -2,7 +2,7 @@ import { expect, test } from "vitest"
 
 import { createRoutes } from "./manager"
 
-const pages = [
+const pageList1 = [
   {
     routePath: "/",
     filePath: "src/pages/layout.tsx",
@@ -110,117 +110,67 @@ const pages = [
   },
 ]
 
-test("createRoutes", () => {
-  expect(createRoutes(pages)).toMatchInlineSnapshot(`
-    [
-      {
-        "children": [
-          {
-            "children": [
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/users/page.tsx",
-                "filePath": "src/pages/(admin)/users/page.tsx",
-                "meta": {},
-                "path": "/users",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/renewable-purchases/page.tsx",
-                "filePath": "src/pages/(admin)/renewable-purchases/page.tsx",
-                "meta": {},
-                "path": "/renewable-purchases",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-ranks/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-ranks/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-ranks",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-reports/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-reports/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-reports",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-articles/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-articles/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-articles",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-enterprises/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-enterprises/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-enterprises",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/renewable-purchases/:id/page.tsx",
-                "filePath": "src/pages/(admin)/renewable-purchases/:id/page.tsx",
-                "meta": {},
-                "path": "/renewable-purchases/:id",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-ranks/:id/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-ranks/:id/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-ranks/:id",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-reports/:id/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-reports/:id/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-reports/:id",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-articles/:id/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-articles/:id/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-articles/:id",
-              },
-              {
-                "children": undefined,
-                "component": "/src/pages/(admin)/carbon-neutrality-enterprises/:id/page.tsx",
-                "filePath": "src/pages/(admin)/carbon-neutrality-enterprises/:id/page.tsx",
-                "meta": {},
-                "path": "/carbon-neutrality-enterprises/:id",
-              },
-            ],
-            "component": "/src/pages/(admin)/layout.tsx",
-            "filePath": "src/pages/(admin)/layout.tsx",
-            "meta": {},
-            "path": "/",
-          },
-          {
-            "children": [
-              {
-                "children": undefined,
-                "component": "/src/pages/login/page.tsx",
-                "filePath": "src/pages/login/page.tsx",
-                "meta": {},
-                "path": "/login",
-              },
-            ],
-            "component": "/src/pages/login/layout.tsx",
-            "filePath": "src/pages/login/layout.tsx",
-            "meta": {},
-            "path": "/login",
-          },
-        ],
-        "component": "/src/pages/layout.tsx",
-        "filePath": "src/pages/layout.tsx",
-        "meta": {},
-        "path": "/",
-      },
-    ]
-  `)
+const pageList2 = [
+  {
+    routePath: "/a",
+    filePath: "src/pages/a/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/",
+    filePath: "src/pages/layout.tsx",
+    isLayout: true,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/",
+    filePath: "src/pages/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+]
+
+const NO_ROOT_LAYOUT = [
+  {
+    routePath: "/a",
+    filePath: "src/pages/a/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/",
+    filePath: "src/pages/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/b",
+    filePath: "src/pages/b/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/b",
+    filePath: "src/pages/b/layout.tsx",
+    isLayout: true,
+    is404: false,
+    meta: {},
+  },
+]
+
+const testGroup = [pageList1, pageList2, NO_ROOT_LAYOUT]
+
+testGroup.forEach((pageList, index) => {
+  test(`create-routes-${index}`, () => {
+    expect(createRoutes(pageList)).toMatchFileSnapshot(
+      `snapshot/create-routes-${index}.js`,
+    )
+  })
 })
