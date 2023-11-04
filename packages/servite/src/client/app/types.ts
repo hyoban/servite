@@ -4,6 +4,7 @@ export type { PageData, AppState }
 
 export class PageError extends Error {
   isNotFound?: boolean
+  cause?: Error
 
   constructor(
     message?: string,
@@ -12,7 +13,8 @@ export class PageError extends Error {
       isNotFound?: boolean
     },
   ) {
-    super(message, options?.cause ? { cause: options.cause } : undefined)
+    super(message)
+    this.cause = options?.cause
     this.isNotFound = options?.isNotFound
   }
 }
