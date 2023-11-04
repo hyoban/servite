@@ -134,7 +134,7 @@ const pageList2 = [
   },
 ]
 
-const NO_ROOT_LAYOUT = [
+const NO_ROOT_LAYOUT3 = [
   {
     routePath: "/a",
     filePath: "src/pages/a/page.tsx",
@@ -168,7 +168,7 @@ const NO_ROOT_LAYOUT = [
 const testGroup = {
   pageList1,
   pageList2,
-  "no-root-layout": NO_ROOT_LAYOUT,
+  "no-root-layout": NO_ROOT_LAYOUT3,
 }
 
 Object.entries(testGroup).forEach(([key, value], index) => {
