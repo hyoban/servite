@@ -1,7 +1,7 @@
 .DS_Store
-.vscode
 node_modules
 *.log
 dist
+.eslintcache
 
 *.prebuilt.ts
