@@ -165,11 +165,15 @@ const NO_ROOT_LAYOUT = [
   },
 ]
 
-const testGroup = [pageList1, pageList2, NO_ROOT_LAYOUT]
+const testGroup = {
+  pageList1,
+  pageList2,
+  "no-root-layout": NO_ROOT_LAYOUT,
+}
 
-testGroup.forEach((pageList, index) => {
-  test(`create-routes-${index}`, () => {
-    expect(createRoutes(pageList)).toMatchFileSnapshot(
+Object.entries(testGroup).forEach(([key, value], index) => {
+  test(`create-routes-${key}`, () => {
+    expect(createRoutes(value)).toMatchFileSnapshot(
       `snapshot/create-routes-${index}.js`,
     )
   })
