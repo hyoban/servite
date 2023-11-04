@@ -1,19 +1,21 @@
-import path from 'upath';
+import { defu } from "defu"
 import {
   createNitro,
   NitroConfig,
   PublicAssetDir,
   ServerAssetDir,
-} from 'nitropack';
-import type { InlineConfig, ResolvedConfig } from 'vite';
-import { defu } from 'defu';
-import { DIST_DIR } from '../constants.js';
-import { ServiteConfig } from '../types.js';
+} from "nitropack"
+import path from "upath"
+
+import { DIST_DIR } from "../constants.js"
+import { ServiteConfig } from "../types.js"
+
+import type { InlineConfig, ResolvedConfig } from "vite"
 
 export interface CreateServiteNitroConfig {
-  serviteConfig: ServiteConfig;
-  viteConfig: ResolvedConfig;
-  nitroConfig?: NitroConfig;
+  serviteConfig: ServiteConfig
+  viteConfig: ResolvedConfig
+  nitroConfig?: NitroConfig
 }
 
 export async function initNitro({
@@ -28,13 +30,13 @@ export async function initNitro({
       {
         baseURL: viteConfig.base,
         rootDir: viteConfig.root,
-        srcDir: path.resolve(viteConfig.root, 'src/server'),
-        buildDir: path.resolve(viteConfig.root, 'node_modules/.servite'),
+        srcDir: path.resolve(viteConfig.root, "src/server"),
+        buildDir: path.resolve(viteConfig.root, "node_modules/.servite"),
         output: {
           dir: path.resolve(
             viteConfig.root,
             viteConfig.build.outDir,
-            '.output'
+            ".output",
           ),
         },
         serverAssets: getNitroServerAssets(viteConfig),
@@ -50,57 +52,57 @@ export async function initNitro({
             server: viteConfig.server,
           },
         },
-        renderer: path.resolve(DIST_DIR, 'server/runtime/renderer'),
+        renderer: path.resolve(DIST_DIR, "server/runtime/renderer"),
         externals: {
-          inline: [DIST_DIR, 'servite/server'],
+          inline: [DIST_DIR, "servite/server"],
         },
         typescript: {
           generateTsConfig: false,
         },
         virtual: {
-          'virtual:servite/prod-ssr-entry': () => {
+          "virtual:servite/prod-ssr-entry": () => {
             if (nitroConfig?.dev || serviteConfig.csr) {
               return `export const render = () => '';
 export const pages = [];
 export const routes = [];
-`;
+`
             }
 
             const ssrEntryPath = path.resolve(
               viteConfig.root,
               viteConfig.build.outDir,
-              'ssr/entry.server.js'
-            );
-            return `export * from '${ssrEntryPath}';`;
+              "ssr/entry.server.js",
+            )
+            return `export * from '${ssrEntryPath}';`
           },
         },
-      }
-    )
-  );
+      },
+    ),
+  )
 
-  return nitro;
+  return nitro
 }
 
 function getNitroServerAssets(viteConfig: ResolvedConfig): ServerAssetDir[] {
-  if (viteConfig.command === 'serve') {
-    return [];
+  if (viteConfig.command === "serve") {
+    return []
   }
 
   return [
     {
-      baseName: 'servite',
+      baseName: "servite",
       dir: path.resolve(
         viteConfig.root,
         viteConfig.build.outDir,
-        '.output/server-assets'
+        ".output/server-assets",
       ),
     },
-  ];
+  ]
 }
 
 function getNitroPublicAssets(viteConfig: ResolvedConfig): PublicAssetDir[] {
-  if (viteConfig.command === 'serve') {
-    return [];
+  if (viteConfig.command === "serve") {
+    return []
   }
 
   return [
@@ -115,9 +117,9 @@ function getNitroPublicAssets(viteConfig: ResolvedConfig): PublicAssetDir[] {
       dir: path.resolve(
         viteConfig.root,
         viteConfig.build.outDir,
-        viteConfig.build.assetsDir
+        viteConfig.build.assetsDir,
       ),
       maxAge: 60 * 60 * 24 * 365, // 1 year
     },
-  ];
+  ]
 }

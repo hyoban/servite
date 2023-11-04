@@ -1,14 +1,15 @@
-import { useMemo } from 'react';
-import { isEqual } from 'ufo';
-import { useAppState } from 'servite/client';
-import { SidebarItem } from '@/types';
-import { useSiteState } from '@/context';
-import { Link } from '../Link';
-import { ChevronLeft, ChevronRight } from '../Icons';
+import { useSiteState } from "@/context"
+import { SidebarItem } from "@/types"
+import { useMemo } from "react"
+import { useAppState } from "servite/client"
+import { isEqual } from "ufo"
 
-function Item({ type, item }: { type: 'prev' | 'next'; item?: SidebarItem }) {
+import { ChevronLeft, ChevronRight } from "../Icons"
+import { Link } from "../Link"
+
+function Item({ type, item }: { type: "prev" | "next"; item?: SidebarItem }) {
   if (!item) {
-    return <div></div>;
+    return <div></div>
   }
 
   return (
@@ -17,7 +18,7 @@ function Item({ type, item }: { type: 'prev' | 'next'; item?: SidebarItem }) {
       to={item.link}
       color={false}
     >
-      {type === 'prev' ? (
+      {type === "prev" ? (
         <div className="flex items-center text-xs text-c-text-2 group-hover:text-c-text-1 transition-colors">
           <ChevronLeft className="mr-0.5" />
           Previous
@@ -30,68 +31,68 @@ function Item({ type, item }: { type: 'prev' | 'next'; item?: SidebarItem }) {
       )}
       <div
         className={`mt-1 text-base text-c-brand group-hover:text-c-brand-light transition-colors ${
-          type === 'prev' ? 'text-left' : 'text-right'
+          type === "prev" ? "text-left" : "text-right"
         }`}
       >
         {item.text}
       </div>
     </Link>
-  );
+  )
 }
 
 export function PrevNext() {
-  const { pagePath } = useAppState();
-  const { sidebar } = useSiteState();
+  const { pagePath } = useAppState()
+  const { sidebar } = useSiteState()
 
   const { prev, next } = useMemo<{
-    prev?: SidebarItem;
-    next?: SidebarItem;
+    prev?: SidebarItem
+    next?: SidebarItem
   }>(() => {
-    let _prev: SidebarItem | undefined;
-    let _next: SidebarItem | undefined;
-    let found = false;
+    let _prev: SidebarItem | undefined
+    let _next: SidebarItem | undefined
+    let found = false
 
     function find(items: SidebarItem[] = []) {
       if (!pagePath) {
-        return;
+        return
       }
 
       for (let i = 0; i < items.length; i++) {
         if (_next) {
-          break;
+          break
         }
 
         if (items[i].items) {
-          find(items[i].items);
-          continue;
+          find(items[i].items)
+          continue
         }
 
         if (found) {
-          _next = items[i];
-          break;
+          _next = items[i]
+          break
         }
 
         if (items[i].link && isEqual(items[i].link!, pagePath)) {
-          found = true;
-          continue;
+          found = true
+          continue
         }
 
-        _prev = items[i];
+        _prev = items[i]
       }
     }
 
-    find(sidebar);
+    find(sidebar)
 
     // not found, indicating that the current path does not have a sidebar and prev/next
     if (!found) {
-      return {};
+      return {}
     }
 
-    return { prev: _prev, next: _next };
-  }, [sidebar, pagePath]);
+    return { prev: _prev, next: _next }
+  }, [sidebar, pagePath])
 
   if (!prev && !next) {
-    return null;
+    return null
   }
 
   return (
@@ -99,5 +100,5 @@ export function PrevNext() {
       <Item type="prev" item={prev} />
       <Item type="next" item={next} />
     </div>
-  );
+  )
 }

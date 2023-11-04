@@ -12,10 +12,10 @@ servite 内置了路由库：**react-router-dom**，并且在日常开发中我�
 所以 servite 导出了 react-router-dom 的大部分 API，使用示例：
 
 ```tsx
-import { useLocation, Link, Outlet } from 'servite/client';
+import { Link, Outlet, useLocation } from "servite/client"
 
 export function Component() {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   return (
     <div className="layout">
@@ -30,14 +30,14 @@ export function Component() {
       </ul>
       <Outlet />
     </div>
-  );
+  )
 }
 ```
 
 ## 使用 Helmet 组件修改 HTML head
 
 ```tsx
-import { Helmet } from 'servite/client';
+import { Helmet } from "servite/client"
 
 export function Component() {
   return (
@@ -46,17 +46,17 @@ export function Component() {
       <meta name="description" content="A app powered by servite " />
       <meta name="viewport" content="width=device-width" />
     </Helemt>
-  );
+  )
 }
 ```
 
 ## 获取当前的应用状态
 
 ```tsx
-import { useAppState } from 'servite/client';
+import { useAppState } from "servite/client"
 
 export function Component() {
-  const appState = useAppState();
+  const appState = useAppState()
   // ...
 }
 ```

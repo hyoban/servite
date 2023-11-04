@@ -8,38 +8,38 @@ interface UserServiteConfig {
    * Directory for finding pages
    * @default [{ dir: 'src/pages' }]
    */
-  pagesDirs?: PagesDir[];
+  pagesDirs?: PagesDir[]
   /**
    * Prerender routes (Static Site Generate)
    *
    * supports glob patterns
    * @default false
    */
-  ssg?: boolean | string[];
+  ssg?: boolean | string[]
   /**
    * Switch to CSR (Client Side Rendering)
    * @default false
    */
-  csr?: boolean;
+  csr?: boolean
   api?: {
     /**
      * eg. `'@/utils/fetch'` -> `import _fetch from '@/utils/fetch'`
      */
-    fetchImportSource?: string;
+    fetchImportSource?: string
     /**
      * Fully custom API code for client
      */
-    generateCode?: (handler: ApiHandler, originalCode: string) => string;
-  };
+    generateCode?: (handler: ApiHandler, originalCode: string) => string
+  }
   /**
    * Options of @vitejs/plugin-react
    */
-  react?: ReactOptions;
+  react?: ReactOptions
   /**
    * Nitro config
    * @see https://github.com/unjs/nitro
    */
-  nitro?: NitroConfig;
+  nitro?: NitroConfig
 }
 ```
 
@@ -49,9 +49,9 @@ interface UserServiteConfig {
 
 ```ts
 interface PagesDir {
-  base?: string;
-  dir: string;
-  ignore?: string[];
+  base?: string
+  dir: string
+  ignore?: string[]
 }
 ```
 

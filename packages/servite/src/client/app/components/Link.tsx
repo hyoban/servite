@@ -1,16 +1,17 @@
-import React, { useTransition } from 'react';
-import { matchRoutes, resolvePath, To } from 'react-router-dom';
-import { useHref, useLocation, useLinkClickHandler } from '../router';
-import { hasIslands } from '../constants.js';
-import { useAppState } from '../context.js';
-import { useNProgress } from '../hooks/useNProgress.js';
+import React, { useTransition } from "react"
+import { matchRoutes, resolvePath, To } from "react-router-dom"
+
+import { hasIslands } from "../constants.js"
+import { useAppState } from "../context.js"
+import { useNProgress } from "../hooks/useNProgress.js"
+import { useHref, useLinkClickHandler, useLocation } from "../router"
 
 export interface LinkProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  reloadDocument?: boolean;
-  replace?: boolean;
-  state?: any;
-  to: To;
+  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+  reloadDocument?: boolean
+  replace?: boolean
+  state?: any
+  to: To
 }
 
 /**
@@ -23,45 +24,45 @@ export interface LinkProps
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function LinkWithRef(
     { onClick, reloadDocument, replace = false, state, target, to, ...rest },
-    ref
+    ref,
   ) {
-    const href = useHref(to);
-    const internalOnClick = useLinkClickHandler(to, { replace, state, target });
-    const [isPending, startTransition] = useTransition();
-    const { pathname } = useLocation();
-    const { routes } = useAppState();
+    const href = useHref(to)
+    const internalOnClick = useLinkClickHandler(to, { replace, state, target })
+    const [isPending, startTransition] = useTransition()
+    const { pathname } = useLocation()
+    const { routes } = useAppState()
 
     const handleClick = (
-      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) => {
       if (onClick) {
-        onClick(event);
+        onClick(event)
       }
 
       if (!hasIslands && !event.defaultPrevented && !reloadDocument) {
         startTransition(() => {
-          internalOnClick(event);
-        });
+          internalOnClick(event)
+        })
       }
-    };
+    }
 
     const handleMouseEnter = () => {
       if (
         !hasIslands &&
-        ((typeof to === 'string' && to.startsWith('/')) ||
-          (typeof to === 'object' && to.pathname?.startsWith('/')))
+        ((typeof to === "string" && to.startsWith("/")) ||
+          (typeof to === "object" && to.pathname?.startsWith("/")))
       ) {
-        const { pathname: targetPath } = resolvePath(to, pathname);
+        const { pathname: targetPath } = resolvePath(to, pathname)
 
         if (targetPath !== pathname) {
-          matchRoutes(routes || [], targetPath)?.forEach(m => {
-            (m.route as any).component?.prefetch?.();
-          });
+          matchRoutes(routes || [], targetPath)?.forEach((m) => {
+            ;(m.route as any).component?.prefetch?.()
+          })
         }
       }
-    };
+    }
 
-    useNProgress(isPending, 200);
+    useNProgress(isPending, 200)
 
     return (
       <a
@@ -72,6 +73,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         target={target}
         onMouseEnter={handleMouseEnter}
       />
-    );
-  }
-);
+    )
+  },
+)

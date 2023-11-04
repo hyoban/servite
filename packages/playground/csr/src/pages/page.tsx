@@ -1,24 +1,26 @@
 /**
  * @title 1234
  */
-import { useLoaderData } from 'servite/client';
-import reactLogo from '../assets/react.svg';
-import './page.css';
+import { useLoaderData } from "servite/client"
+
+import reactLogo from "../assets/react.svg"
+
+import "./page.css"
 
 interface LoaderData {
-  list: number[];
-  total: number;
+  list: number[]
+  total: number
 }
 
 export const loader = () => {
   return {
     list: [0, 1, 2],
     total: 8,
-  };
-};
+  }
+}
 
 export default function Page() {
-  const loaderData = useLoaderData<LoaderData>();
+  const loaderData = useLoaderData<LoaderData>()
 
   return (
     <div className="App">
@@ -42,5 +44,5 @@ export default function Page() {
         Click on the Vite and React logos to learn more
       </p>
     </div>
-  );
+  )
 }

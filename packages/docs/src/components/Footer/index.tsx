@@ -5,5 +5,5 @@ export function Footer({ children }: { children?: React.ReactNode }) {
         {children}
       </div>
     </footer>
-  );
+  )
 }

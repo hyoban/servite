@@ -1,11 +1,11 @@
-import { eventHandler } from 'servite/server';
+import { eventHandler } from "servite/server"
 
-export default eventHandler(event => {
+export default eventHandler((event) => {
   // eslint-disable-next-line no-console
-  console.log('api eventHandler', event.path);
+  console.log("api eventHandler", event.path)
   return {
     code: 0,
-    msg: 'ok',
+    msg: "ok",
     path: event.path,
-  };
-});
+  }
+})

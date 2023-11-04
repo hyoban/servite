@@ -1,28 +1,30 @@
-import React from 'react';
-import { MDXProvider } from '@mdx-js/react';
-import { Callout } from '../Callout';
-import { Demo } from '../Demo';
-import * as _mdxComponents from './mdxComponents';
-import './index.css';
+import { MDXProvider } from "@mdx-js/react"
+import React from "react"
+
+import { Callout } from "../Callout"
+import { Demo } from "../Demo"
+import * as _mdxComponents from "./mdxComponents"
+
+import "./index.css"
 
 const mdxComponents = Object.entries(_mdxComponents).reduce(
   (res, [name, component]) => {
     // @ts-ignore
-    res[`${name[0].toLowerCase()}${name.slice(1)}`] = component;
-    return res;
+    res[`${name[0].toLowerCase()}${name.slice(1)}`] = component
+    return res
   },
   {
     Callout,
     Demo,
-  } as Record<string, React.ComponentType<any>>
-);
+  } as Record<string, React.ComponentType<any>>,
+)
 
 export interface MdxProps {
-  className?: string;
-  children: React.ReactNode;
+  className?: string
+  children: React.ReactNode
 }
 
-export function Mdx({ className = '', children }: MdxProps) {
+export function Mdx({ className = "", children }: MdxProps) {
   return (
     <div
       className={`${className} markdown-body prose dark:prose-invert max-w-none w-full
@@ -33,5 +35,5 @@ export function Mdx({ className = '', children }: MdxProps) {
     >
       <MDXProvider components={mdxComponents}>{children}</MDXProvider>
     </div>
-  );
+  )
 }

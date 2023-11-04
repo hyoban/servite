@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react"
 
 type Icon =
   | string
   | React.ComponentType<any>
-  | [type: string | React.ComponentType<any>, props?: Record<string, any>];
+  | [type: string | React.ComponentType<any>, props?: Record<string, any>]
 
 export function TextWithIcon({
   text,
@@ -12,14 +12,14 @@ export function TextWithIcon({
   as = React.Fragment,
   className,
 }: {
-  text?: string;
-  icon?: Icon;
-  space?: number | string;
-  as?: keyof React.ReactHTML | React.ComponentType<any>;
-  className?: string;
+  text?: string
+  icon?: Icon
+  space?: number | string
+  as?: keyof React.ReactHTML | React.ComponentType<any>
+  className?: string
 }) {
-  const iconType = Array.isArray(icon) ? icon[0] : icon;
-  const iconProps = Array.isArray(icon) ? icon[1] : undefined;
+  const iconType = Array.isArray(icon) ? icon[0] : icon
+  const iconProps = Array.isArray(icon) ? icon[1] : undefined
 
   return React.createElement(
     as,
@@ -33,6 +33,6 @@ export function TextWithIcon({
           }),
         })}
       <span>{text}</span>
-    </>
-  );
+    </>,
+  )
 }

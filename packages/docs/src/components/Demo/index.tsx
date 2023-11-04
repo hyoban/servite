@@ -1,43 +1,45 @@
-import { useState } from 'react';
-import { copyToClipboard } from '@/utils';
+import { copyToClipboard } from "@/utils"
+import { useState } from "react"
+
 import {
+  Check as IconCheck,
   Code as IconCode,
   Copy as IconCopy,
-  Check as IconCheck,
-} from '../Icons';
-import './index.css';
+} from "../Icons"
+
+import "./index.css"
 
 export interface DemoProps {
-  code: string;
-  codeHtml: string;
-  meta?: Record<string, any>;
-  language?: string;
-  children?: React.ReactNode;
+  code: string
+  codeHtml: string
+  meta?: Record<string, any>
+  language?: string
+  children?: React.ReactNode
 }
 
 export function Demo({ code, codeHtml, children }: DemoProps) {
-  const [showCode, setShowCode] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+  const [showCode, setShowCode] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   const handleActionBarClick = (ev: React.SyntheticEvent) => {
     if (ev.target !== ev.currentTarget) {
-      return;
+      return
     }
-    setShowCode(prev => !prev);
-  };
+    setShowCode((prev) => !prev)
+  }
 
   const handleCopy = async () => {
     if (copySuccess) {
-      return;
+      return
     }
 
-    await copyToClipboard(code);
+    await copyToClipboard(code)
 
-    setCopySuccess(true);
+    setCopySuccess(true)
     setTimeout(() => {
-      setCopySuccess(false);
-    }, 1000);
-  };
+      setCopySuccess(false)
+    }, 1000)
+  }
 
   return (
     <div className="my-5 border border-c-border-1 rounded-md divide-y divide-c-border-1 overflow-hidden">
@@ -47,14 +49,14 @@ export function Demo({ code, codeHtml, children }: DemoProps) {
         onClick={handleActionBarClick}
       >
         <button
-          className={`btn-text h-full px-3 ${showCode ? 'text-c-brand' : ''}`}
-          onClick={() => setShowCode(prev => !prev)}
+          className={`btn-text h-full px-3 ${showCode ? "text-c-brand" : ""}`}
+          onClick={() => setShowCode((prev) => !prev)}
         >
           <IconCode />
         </button>
         <button
           className={`btn-text h-full px-3 ${
-            copySuccess ? 'text-c-brand' : ''
+            copySuccess ? "text-c-brand" : ""
           }`}
           onClick={handleCopy}
         >
@@ -68,5 +70,5 @@ export function Demo({ code, codeHtml, children }: DemoProps) {
         ></div>
       )}
     </div>
-  );
+  )
 }

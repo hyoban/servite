@@ -1,7 +1,7 @@
 /**
  * Based on https://tabler-icons.io/
  */
-import { SVGProps } from 'react';
+import { SVGProps } from "react"
 
 export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
   return (
@@ -15,7 +15,7 @@ export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
         d="M5 12h14M5 12l6 6m-6-6l6-6"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ArrowRight(props: SVGProps<SVGSVGElement>) {
@@ -30,7 +30,7 @@ export function ArrowRight(props: SVGProps<SVGSVGElement>) {
         d="M5 12h14m-6 6l6-6m-6-6l6 6"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ArrowUpRight(props: SVGProps<SVGSVGElement>) {
@@ -45,7 +45,7 @@ export function ArrowUpRight(props: SVGProps<SVGSVGElement>) {
         d="M17 7L7 17M8 7h9v9"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ChevronLeft(props: SVGProps<SVGSVGElement>) {
@@ -60,7 +60,7 @@ export function ChevronLeft(props: SVGProps<SVGSVGElement>) {
         d="m15 6l-6 6l6 6"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ChevronRight(props: SVGProps<SVGSVGElement>) {
@@ -75,7 +75,7 @@ export function ChevronRight(props: SVGProps<SVGSVGElement>) {
         d="m9 6l6 6l-6 6"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ChevronDown(props: SVGProps<SVGSVGElement>) {
@@ -90,7 +90,7 @@ export function ChevronDown(props: SVGProps<SVGSVGElement>) {
         d="m6 9l6 6l6-6"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ChevronsLeft(props: SVGProps<SVGSVGElement>) {
@@ -105,7 +105,7 @@ export function ChevronsLeft(props: SVGProps<SVGSVGElement>) {
         d="m11 7l-5 5l5 5m6-10l-5 5l5 5"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function ChevronsRight(props: SVGProps<SVGSVGElement>) {
@@ -120,7 +120,7 @@ export function ChevronsRight(props: SVGProps<SVGSVGElement>) {
         d="m7 7l5 5l-5 5m6-10l5 5l-5 5"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Link(props: SVGProps<SVGSVGElement>) {
@@ -141,7 +141,7 @@ export function Link(props: SVGProps<SVGSVGElement>) {
         d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
       />
     </svg>
-  );
+  )
 }
 
 export function ExternalLink(props: SVGProps<SVGSVGElement>) {
@@ -156,7 +156,7 @@ export function ExternalLink(props: SVGProps<SVGSVGElement>) {
         d="M11 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-5m-7 1L20 4m-5 0h5v5"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Sun(props: SVGProps<SVGSVGElement>) {
@@ -173,7 +173,7 @@ export function Sun(props: SVGProps<SVGSVGElement>) {
         <path d="M3 12h1m8-9v1m8 8h1m-9 8v1M5.6 5.6l.7.7m12.1-.7l-.7.7m0 11.4l.7.7m-12.1-.7l-.7.7"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function Moon(props: SVGProps<SVGSVGElement>) {
@@ -188,7 +188,7 @@ export function Moon(props: SVGProps<SVGSVGElement>) {
         d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Menu(props: SVGProps<SVGSVGElement>) {
@@ -203,7 +203,7 @@ export function Menu(props: SVGProps<SVGSVGElement>) {
         d="M4 6h16M4 12h16M4 18h16"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function DotsVertical(props: SVGProps<SVGSVGElement>) {
@@ -221,7 +221,7 @@ export function DotsVertical(props: SVGProps<SVGSVGElement>) {
         <circle cx="12" cy="5" r="1"></circle>
       </g>
     </svg>
-  );
+  )
 }
 
 export function DotsHorizontal(props: SVGProps<SVGSVGElement>) {
@@ -239,7 +239,7 @@ export function DotsHorizontal(props: SVGProps<SVGSVGElement>) {
         <circle cx="19" cy="12" r="1"></circle>
       </g>
     </svg>
-  );
+  )
 }
 
 export function Search(props: SVGProps<SVGSVGElement>) {
@@ -256,7 +256,7 @@ export function Search(props: SVGProps<SVGSVGElement>) {
         <path d="m21 21l-6-6"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function Code(props: SVGProps<SVGSVGElement>) {
@@ -271,7 +271,7 @@ export function Code(props: SVGProps<SVGSVGElement>) {
         d="m7 8l-4 4l4 4m10-8l4 4l-4 4M14 4l-4 16"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Copy(props: SVGProps<SVGSVGElement>) {
@@ -288,7 +288,7 @@ export function Copy(props: SVGProps<SVGSVGElement>) {
         <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function Check(props: SVGProps<SVGSVGElement>) {
@@ -303,7 +303,7 @@ export function Check(props: SVGProps<SVGSVGElement>) {
         d="m5 12l5 5L20 7"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Pencil(props: SVGProps<SVGSVGElement>) {
@@ -318,7 +318,7 @@ export function Pencil(props: SVGProps<SVGSVGElement>) {
         d="M4 20h4L18.5 9.5a1.5 1.5 0 0 0-4-4L4 16v4m9.5-13.5l4 4"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Command(props: SVGProps<SVGSVGElement>) {
@@ -333,7 +333,7 @@ export function Command(props: SVGProps<SVGSVGElement>) {
         d="M7 9a2 2 0 1 1 2-2v10a2 2 0 1 1-2-2h10a2 2 0 1 1-2 2V7a2 2 0 1 1 2 2H7"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Language(props: SVGProps<SVGSVGElement>) {
@@ -350,7 +350,7 @@ export function Language(props: SVGProps<SVGSVGElement>) {
         <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4m.3 7l4-9l4 9m-.9-2h-6.2"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function CaretRight(props: SVGProps<SVGSVGElement>) {
@@ -365,7 +365,7 @@ export function CaretRight(props: SVGProps<SVGSVGElement>) {
         d="m9 18l6-6l-6-6v12"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Bolt(props: SVGProps<SVGSVGElement>) {
@@ -380,7 +380,7 @@ export function Bolt(props: SVGProps<SVGSVGElement>) {
         d="M13 3v7h6l-8 11v-7H5l8-11"
       ></path>
     </svg>
-  );
+  )
 }
 
 export function Info(props: SVGProps<SVGSVGElement>) {
@@ -397,7 +397,7 @@ export function Info(props: SVGProps<SVGSVGElement>) {
         <path d="M12 8h.01M11 12h1v4h1"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function AlertCircle(props: SVGProps<SVGSVGElement>) {
@@ -414,7 +414,7 @@ export function AlertCircle(props: SVGProps<SVGSVGElement>) {
         <path d="M12 8v4m0 4h.01"></path>
       </g>
     </svg>
-  );
+  )
 }
 
 export function AlertTriangle(props: SVGProps<SVGSVGElement>) {
@@ -429,5 +429,5 @@ export function AlertTriangle(props: SVGProps<SVGSVGElement>) {
         d="M12 9v2m0 4v.01M5 19h14a2 2 0 0 0 1.84-2.75L13.74 4a2 2 0 0 0-3.5 0l-7.1 12.25A2 2 0 0 0 4.89 19"
       ></path>
     </svg>
-  );
+  )
 }

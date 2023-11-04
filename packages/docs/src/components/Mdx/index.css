@@ -16,7 +16,9 @@
   padding-right: 0.23em;
   font-weight: 500;
   opacity: 0;
-  transition: color 0.25s, opacity 0.25s;
+  transition:
+    color 0.25s,
+    opacity 0.25s;
 }
 
 .markdown-body h1:hover .header-anchor,
@@ -30,7 +32,7 @@
   opacity: 1;
 }
 
-.prose pre code:not([class~='not-prose'] *) {
+.prose pre code:not([class~="not-prose"] *) {
   display: block;
   width: max-content;
   min-width: 100%;

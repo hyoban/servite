@@ -1,5 +1,5 @@
-import './page.css';
+import "./page.css"
 
 export default function Page() {
-  return <div className="b">B</div>;
+  return <div className="b">B</div>
 }

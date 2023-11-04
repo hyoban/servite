@@ -1,29 +1,29 @@
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
-} from 'servite/client';
+} from "servite/client"
 
-export interface LinkProps extends Omit<RouterLinkProps, 'to' | 'color'> {
-  to?: string;
-  color?: boolean;
+export interface LinkProps extends Omit<RouterLinkProps, "to" | "color"> {
+  to?: string
+  color?: boolean
 }
 
 export function Link(props: LinkProps) {
   const {
-    to = '',
+    to = "",
     children,
-    className = '',
+    className = "",
     color = true,
     ...restProps
-  } = props;
-  const isSameOrigin = !to.startsWith('http');
-  const isHash = to.startsWith('#');
+  } = props
+  const isSameOrigin = !to.startsWith("http")
+  const isHash = to.startsWith("#")
 
   const finalClassName = `${className} ${
-    color ? 'text-c-brand hover:text-c-brand-light transition-colors' : ''
-  }`;
+    color ? "text-c-brand hover:text-c-brand-light transition-colors" : ""
+  }`
 
-  const finalChildren = <>{children}</>;
+  const finalChildren = <>{children}</>
 
   return isSameOrigin && !isHash ? (
     <RouterLink {...restProps} className={finalClassName} to={to}>
@@ -35,10 +35,10 @@ export function Link(props: LinkProps) {
       className={finalClassName}
       href={to}
       {...(!isHash && {
-        target: '_blank',
+        target: "_blank",
       })}
     >
       {children}
     </a>
-  );
+  )
 }

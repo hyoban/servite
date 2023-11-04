@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { useAppState } from 'servite/client';
-import { SidebarItem } from '@/types';
-import { Link } from '../Link';
-import { TextWithIcon } from '../TextWithIcon';
-import { CaretRight, ChevronRight } from '../Icons';
+import { SidebarItem } from "@/types"
+import { useEffect, useState } from "react"
+import { CSSTransition } from "react-transition-group"
+import { useAppState } from "servite/client"
 
-import './index.css';
+import { CaretRight, ChevronRight } from "../Icons"
+import { Link } from "../Link"
+import { TextWithIcon } from "../TextWithIcon"
+
+import "./index.css"
 
 export interface SidebarProps {
-  items: SidebarItem[];
-  activeItems: SidebarItem[];
+  items: SidebarItem[]
+  activeItems: SidebarItem[]
 }
 
 export function Sidebar({ items, activeItems }: SidebarProps) {
-  const { pagePath } = useAppState();
-  const [open, setOpen] = useState(false);
+  const { pagePath } = useAppState()
+  const [open, setOpen] = useState(false)
 
   // close sidebar when path is changed
   useEffect(() => {
-    setOpen(false);
-  }, [pagePath]);
+    setOpen(false)
+  }, [pagePath])
 
   return (
     <>
@@ -61,7 +62,7 @@ export function Sidebar({ items, activeItems }: SidebarProps) {
         fixed z-[var(--z-index-sidebar-drawer)] top-0 right-full bottom-0 w-[75vw] max-w-[320px] px-4
         lg:z-[var(--z-index-sidebar)] lg:top-[calc(var(--header-height)+var(--banner-height))] lg:right-auto lg:w-[var(--left-aside-width)]
         transition-transform duration-300 pt-8 pb-24 overflow-y-auto bg-c-bg-0
-        ${open ? 'translate-x-full lg:translate-x-0' : ''}`}
+        ${open ? "translate-x-full lg:translate-x-0" : ""}`}
       >
         {items.map((item, index) => {
           if (item.items) {
@@ -80,7 +81,7 @@ export function Sidebar({ items, activeItems }: SidebarProps) {
                   ))}
                 </div>
               </div>
-            );
+            )
           }
 
           return (
@@ -89,11 +90,11 @@ export function Sidebar({ items, activeItems }: SidebarProps) {
               item={item}
               active={isActiveSidebarItem(activeItems, item)}
             />
-          );
+          )
         })}
       </div>
     </>
-  );
+  )
 }
 
 function SidebarLink({ item, active }: { item: SidebarItem; active: boolean }) {
@@ -104,16 +105,16 @@ function SidebarLink({ item, active }: { item: SidebarItem; active: boolean }) {
       className={`relative flex items-center min-h-[34px] mb-[3px] px-2 py-1.5 text-sm font-medium transition-all
       ${
         active
-          ? 'text-c-brand font-medium before:opacity-[0.12]'
-          : 'text-c-text-1 before:opacity-0 hover:before:opacity-[0.06]'
+          ? "text-c-brand font-medium before:opacity-[0.12]"
+          : "text-c-text-1 before:opacity-0 hover:before:opacity-[0.06]"
       }
       before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-md before:bg-current before:z-[-1] before:transition-opacity`}
     >
       <TextWithIcon text={item.text} icon={item.icon} space="8px" />
     </Link>
-  );
+  )
 }
 
 function isActiveSidebarItem(activeItems: SidebarItem[], item: SidebarItem) {
-  return activeItems.some(x => x.link === item.link && x.text === item.text);
+  return activeItems.some((x) => x.link === item.link && x.text === item.text)
 }

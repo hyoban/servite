@@ -1,42 +1,42 @@
-import { useMemo } from 'react';
-import { useLocation } from 'servite/client';
+import { useMemo } from "react"
+import { useLocation } from "servite/client"
 
 export function matchActive(
   {
     link,
     activeMatch,
   }: {
-    link?: string;
-    activeMatch?: string;
+    link?: string
+    activeMatch?: string
   },
-  pathname: string
+  pathname: string,
 ) {
   if (!link) {
-    return false;
+    return false
   }
 
   if (activeMatch) {
-    return new RegExp(activeMatch).test(pathname);
+    return new RegExp(activeMatch).test(pathname)
   }
 
-  const remainPath = pathname.substring(link.length);
+  const remainPath = pathname.substring(link.length)
 
   return (
-    pathname.startsWith(link) && (!remainPath || remainPath.startsWith('/'))
-  );
+    pathname.startsWith(link) && (!remainPath || remainPath.startsWith("/"))
+  )
 }
 
 export function useActiveMatch({
   link,
   activeMatch,
 }: {
-  link?: string;
-  activeMatch?: string;
+  link?: string
+  activeMatch?: string
 }) {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   return useMemo(
     () => matchActive({ link, activeMatch }, pathname),
-    [link, activeMatch, pathname]
-  );
+    [link, activeMatch, pathname],
+  )
 }

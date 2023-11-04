@@ -1,13 +1,14 @@
-import path from 'upath';
-import fs from 'fs-extra';
+import fs from "fs-extra"
+import path from "upath"
 import {
   HmrContext,
   ModuleNode,
   Plugin,
   ResolvedConfig,
   ViteDevServer,
-} from 'vite';
-import { Page } from '../../shared/types.js';
+} from "vite"
+
+import { Page } from "../../shared/types.js"
 import {
   CUSTOM_SERVER_RENDER_MODULE_ID,
   PAGES_IGNORE_PATTERN,
@@ -18,162 +19,162 @@ import {
   RESOLVED_PAGES_MODULE_ID,
   RESOLVED_PAGES_ROUTES_MODULE_ID,
   SCRIPT_EXTS,
-} from '../constants.js';
-import { ServiteConfig } from '../types.js';
-import { shallowCompare } from '../utils.js';
-import { PagesManager, parsePageMeta } from './manager.js';
+} from "../constants.js"
+import { ServiteConfig } from "../types.js"
+import { shallowCompare } from "../utils.js"
+import { PagesManager, parsePageMeta } from "./manager.js"
 
 export interface ServitePagesPluginConfig {
-  serviteConfig: ServiteConfig;
+  serviteConfig: ServiteConfig
 }
 
 export function servitePages({
   serviteConfig,
 }: ServitePagesPluginConfig): Plugin {
-  let viteConfig: ResolvedConfig;
-  let viteDevServer: ViteDevServer;
-  let pagesManager: PagesManager;
+  let viteConfig: ResolvedConfig
+  let viteDevServer: ViteDevServer
+  let pagesManager: PagesManager
 
   function getPagesAndRoutesModules() {
     return [
       ...(viteDevServer.moduleGraph.getModulesByFile(
-        RESOLVED_PAGES_MODULE_ID
+        RESOLVED_PAGES_MODULE_ID,
       ) || []),
       ...(viteDevServer.moduleGraph.getModulesByFile(
-        RESOLVED_PAGES_ROUTES_MODULE_ID
+        RESOLVED_PAGES_ROUTES_MODULE_ID,
       ) || []),
-    ];
+    ]
   }
 
   return {
-    name: 'servite:pages',
-    enforce: 'pre',
+    name: "servite:pages",
+    enforce: "pre",
     config(config) {
-      const root = path.resolve(config.root || '');
+      const root = path.resolve(config.root || "")
 
       const optimizeEntries = serviteConfig.pagesDirs.flatMap(
         ({ dir, ignore = [] }) => {
-          const dirFromRoot = path.relative(root, path.resolve(root, dir));
+          const dirFromRoot = path.relative(root, path.resolve(root, dir))
 
           // ignore dir outside root
-          if (dirFromRoot.startsWith('../')) {
-            return [];
+          if (dirFromRoot.startsWith("../")) {
+            return []
           }
 
-          const positive = PAGES_PATTERN.map(p => `${dirFromRoot}/${p}`);
+          const positive = PAGES_PATTERN.map((p) => `${dirFromRoot}/${p}`)
           // ignore pattern should prefix with '!'
           const negative = PAGES_IGNORE_PATTERN.concat(ignore).map(
-            p => `!${dirFromRoot}/${p}`
-          );
+            (p) => `!${dirFromRoot}/${p}`,
+          )
 
-          return positive.concat(negative);
-        }
-      );
+          return positive.concat(negative)
+        },
+      )
 
       return {
         optimizeDeps: {
           entries: optimizeEntries,
         },
-      };
+      }
     },
     configResolved(config) {
-      viteConfig = config;
+      viteConfig = config
     },
     configureServer(server) {
-      viteDevServer = server;
+      viteDevServer = server
 
-      server.watcher.on('unlink', async filePath => {
+      server.watcher.on("unlink", async (filePath) => {
         if (!pagesManager) {
-          return;
+          return
         }
 
-        const { isPageFile } = await pagesManager.checkPageFile(filePath);
+        const { isPageFile } = await pagesManager.checkPageFile(filePath)
 
         if (isPageFile) {
-          const seen = new Set<ModuleNode>();
+          const seen = new Set<ModuleNode>()
 
-          getPagesAndRoutesModules().forEach(mod => {
-            viteDevServer.moduleGraph.invalidateModule(mod, seen);
-          });
-          pagesManager.reload();
+          getPagesAndRoutesModules().forEach((mod) => {
+            viteDevServer.moduleGraph.invalidateModule(mod, seen)
+          })
+          pagesManager.reload()
         }
-      });
+      })
     },
     buildStart() {
-      pagesManager = new PagesManager(viteConfig, serviteConfig);
+      pagesManager = new PagesManager(viteConfig, serviteConfig)
     },
     resolveId(source) {
       if (source === PAGES_MODULE_ID) {
-        return RESOLVED_PAGES_MODULE_ID;
+        return RESOLVED_PAGES_MODULE_ID
       }
 
       if (source === PAGES_ROUTES_MODULE_ID) {
-        return RESOLVED_PAGES_ROUTES_MODULE_ID;
+        return RESOLVED_PAGES_ROUTES_MODULE_ID
       }
 
       if (source === CUSTOM_SERVER_RENDER_MODULE_ID) {
-        return RESOLVED_CUSTOM_SERVER_RENDER_MODULE_ID;
+        return RESOLVED_CUSTOM_SERVER_RENDER_MODULE_ID
       }
     },
     async load(id) {
       if (id === RESOLVED_PAGES_MODULE_ID) {
-        return pagesManager.generatePagesCode();
+        return pagesManager.generatePagesCode()
       }
 
       if (id === RESOLVED_PAGES_ROUTES_MODULE_ID) {
-        return pagesManager.generatePagesRoutesCode();
+        return pagesManager.generatePagesRoutesCode()
       }
 
       if (id === RESOLVED_CUSTOM_SERVER_RENDER_MODULE_ID) {
-        const customServerRenderFile = findServerRender(viteConfig.root);
+        const customServerRenderFile = findServerRender(viteConfig.root)
 
         if (customServerRenderFile) {
-          return `import render from '/@fs/${customServerRenderFile}';\nexport default render;`;
+          return `import render from '/@fs/${customServerRenderFile}';\nexport default render;`
         }
-        return `export default undefined;`;
+        return `export default undefined;`
       }
     },
     async transform(code, id) {
       // export will affect @vitejs/plugin-react's judgment of react refresh boundary,
       // so we need to handle hmr for specific export.
       // https://github.com/vitejs/vite/blob/9baa70b788ec0b0fc419db30d627567242c6af7d/packages/plugin-react/src/fast-refresh.ts#L87
-      const { isPageFile } = await pagesManager.checkPageFile(id);
+      const { isPageFile } = await pagesManager.checkPageFile(id)
       if (isPageFile) {
-        return addHmrAccept(code, 'loader');
+        return addHmrAccept(code, "loader")
       }
     },
     async handleHotUpdate(ctx) {
       if (!pagesManager) {
-        return;
+        return
       }
 
       const { isPageFile, existingPage } = await pagesManager.checkPageFile(
-        ctx.file
-      );
+        ctx.file,
+      )
 
       if (
         isPageFile &&
         (!existingPage || (await isPageMetaUpdated(existingPage, ctx)))
       ) {
-        const modules = [...ctx.modules];
-        modules.push(...getPagesAndRoutesModules());
-        pagesManager.reload();
+        const modules = [...ctx.modules]
+        modules.push(...getPagesAndRoutesModules())
+        pagesManager.reload()
 
-        return modules;
+        return modules
       }
     },
     api: {
       getPages: () => pagesManager.getPages(),
     } as any,
-  };
+  }
 }
 
 function addHmrAccept(code: string, field: string) {
   if (
-    !code.includes('import.meta.hot.accept()') &&
+    !code.includes("import.meta.hot.accept()") &&
     (new RegExp(`export\\s+const\\s+${field}(\\s|=|:)`).test(code) ||
       new RegExp(`export\\s+(async\\s+)?function\\s+${field}(\\s|\\()`).test(
-        code
+        code,
       ))
   ) {
     return `${code}\n
@@ -189,22 +190,22 @@ if (import.meta.hot) {
     }
   });
 }
-`;
+`
   }
 
-  return code;
+  return code
 }
 
 async function isPageMetaUpdated(page: Page, hmrCtx: HmrContext) {
-  const newMeta = await parsePageMeta(hmrCtx.file, await hmrCtx.read());
-  return !shallowCompare(page.meta, newMeta);
+  const newMeta = await parsePageMeta(hmrCtx.file, await hmrCtx.read())
+  return !shallowCompare(page.meta, newMeta)
 }
 
 function findServerRender(root: string) {
   for (const ext of SCRIPT_EXTS) {
-    const serverRenderFile = path.resolve(root, `src/server-render${ext}`);
+    const serverRenderFile = path.resolve(root, `src/server-render${ext}`)
     if (fs.existsSync(serverRenderFile)) {
-      return serverRenderFile;
+      return serverRenderFile
     }
   }
 }

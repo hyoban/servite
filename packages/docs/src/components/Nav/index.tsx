@@ -1,14 +1,15 @@
-import React from 'react';
-import { useSiteState } from '@/context';
-import { useActiveMatch } from '@/hooks/useActiveMatch';
-import { NavItem } from '@/types';
-import { Link } from '../Link';
-import { ChevronDown } from '../Icons';
-import { Popup } from '../Popup';
-import { TextWithIcon } from '../TextWithIcon';
+import { useSiteState } from "@/context"
+import { useActiveMatch } from "@/hooks/useActiveMatch"
+import { NavItem } from "@/types"
+import React from "react"
+
+import { ChevronDown } from "../Icons"
+import { Link } from "../Link"
+import { Popup } from "../Popup"
+import { TextWithIcon } from "../TextWithIcon"
 
 function SubTextNavItem({ item }: { item: NavItem }) {
-  const active = useActiveMatch(item);
+  const active = useActiveMatch(item)
 
   return (
     <Link
@@ -18,22 +19,22 @@ function SubTextNavItem({ item }: { item: NavItem }) {
         before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded before:bg-current before:z-[-1] before:transition-opacity
         ${
           active
-            ? 'text-c-brand font-medium before:opacity-[0.12]'
-            : 'before:opacity-0 hover:before:opacity-[0.06]'
+            ? "text-c-brand font-medium before:opacity-[0.12]"
+            : "before:opacity-0 hover:before:opacity-[0.06]"
         }
       `}
     >
       <TextWithIcon text={item.text} icon={item.icon} space="8px" />
     </Link>
-  );
+  )
 }
 
 function TextNavItem({ item }: { item: NavItem }) {
-  const active = useActiveMatch(item);
+  const active = useActiveMatch(item)
 
   const className = `h-full flex items-center px-3 border-b
     cursor-pointer font-medium transition-colors
-    `;
+    `
 
   if (item.items?.length) {
     return (
@@ -43,7 +44,7 @@ function TextNavItem({ item }: { item: NavItem }) {
         <TextWithIcon text={item.text} icon={item.icon} space="6px" />
         <ChevronDown className="ml-1" />
       </div>
-    );
+    )
   }
 
   return (
@@ -51,19 +52,19 @@ function TextNavItem({ item }: { item: NavItem }) {
       to={item.link}
       color={false}
       className={`${className} hover:text-c-brand
-        ${active ? 'border-c-brand' : 'border-transparent'}
+        ${active ? "border-c-brand" : "border-transparent"}
       `}
     >
       <TextWithIcon text={item.text} icon={item.icon} space="6px" />
     </Link>
-  );
+  )
 }
 
 export function TextNav() {
-  const { textNav } = useSiteState();
+  const { textNav } = useSiteState()
 
   if (!textNav?.length) {
-    return null;
+    return null
   }
 
   return (
@@ -85,23 +86,23 @@ export function TextNav() {
           </Popup>
         ) : (
           <TextNavItem key={index} item={item} />
-        )
+        ),
       )}
     </nav>
-  );
+  )
 }
 
 export function IconNav({
   size,
   className,
 }: {
-  size: 'small' | 'medium';
-  className?: string;
+  size: "small" | "medium"
+  className?: string
 }) {
-  const { iconNav } = useSiteState();
+  const { iconNav } = useSiteState()
 
   if (!iconNav?.length) {
-    return null;
+    return null
   }
 
   return (
@@ -114,13 +115,13 @@ export function IconNav({
               to={item.link}
               color={false}
               className={`flex justify-center items-center text-c-text-2 transition-colors hover:text-c-brand
-              ${size === 'small' ? 'w-9 h-9 text-[17px]' : ''}
-              ${size === 'medium' ? 'w-12 h-12 text-xl' : ''}`}
+              ${size === "small" ? "w-9 h-9 text-[17px]" : ""}
+              ${size === "medium" ? "w-12 h-12 text-xl" : ""}`}
             >
               {React.createElement(item.icon)}
             </Link>
-          )
+          ),
       )}
     </div>
-  );
+  )
 }

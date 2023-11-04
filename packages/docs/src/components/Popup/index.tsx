@@ -1,40 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import './index.css';
+import React, { useEffect, useRef, useState } from "react"
+import { CSSTransition } from "react-transition-group"
+
+import "./index.css"
 
 export interface PopupProps {
-  content: React.ReactNode;
-  className?: string;
-  children: React.ReactNode;
+  content: React.ReactNode
+  className?: string
+  children: React.ReactNode
 }
 
-export function Popup({ className = '', content, children }: PopupProps) {
-  const elRef = useRef<HTMLDivElement>(null);
-  const [isHover, setIsHover] = useState(false);
+export function Popup({ className = "", content, children }: PopupProps) {
+  const elRef = useRef<HTMLDivElement>(null)
+  const [isHover, setIsHover] = useState(false)
 
   useEffect(() => {
     if (!elRef.current) {
-      return;
+      return
     }
 
     function enterCallback() {
-      setIsHover(true);
+      setIsHover(true)
     }
 
     function leaveCallback() {
-      setIsHover(false);
+      setIsHover(false)
     }
 
-    const el = elRef.current;
+    const el = elRef.current
 
-    el.addEventListener('mouseenter', enterCallback);
-    el.addEventListener('mouseleave', leaveCallback);
+    el.addEventListener("mouseenter", enterCallback)
+    el.addEventListener("mouseleave", leaveCallback)
 
     return () => {
-      el.removeEventListener('mouseenter', enterCallback);
-      el.removeEventListener('mouseleave', leaveCallback);
-    };
-  }, []);
+      el.removeEventListener("mouseenter", enterCallback)
+      el.removeEventListener("mouseleave", leaveCallback)
+    }
+  }, [])
 
   return (
     <div className={`${className} group relative inline-block`} ref={elRef}>
@@ -51,5 +52,5 @@ export function Popup({ className = '', content, children }: PopupProps) {
         </div>
       </CSSTransition>
     </div>
-  );
+  )
 }

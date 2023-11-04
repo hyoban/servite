@@ -1,59 +1,60 @@
-import path from 'upath';
-import fs from 'fs-extra';
-import { build as viteBuild, InlineConfig, ResolvedConfig } from 'vite';
+import { nodeResolve } from "@rollup/plugin-node-resolve"
+import fs from "fs-extra"
+import { gzipSizeSync } from "gzip-size"
+import mm from "micromatch"
 import {
-  build as nitroBuild,
   copyPublicAssets,
   Nitro,
-  prepare,
+  build as nitroBuild,
   prerender as nitroPrerender,
-} from 'nitropack';
-import mm from 'micromatch';
-import ora from 'ora';
-import colors from 'picocolors';
-import { gzipSizeSync } from 'gzip-size';
-import { RollupOutput } from 'rollup';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { Page } from '../../shared/types.js';
-import { unwrapViteId } from '../../shared/utils.js';
-import { initNitro } from '../nitro/init.js';
-import { SSR_ENTRY_FILE } from '../constants.js';
-import { ServiteConfig } from '../types.js';
+  prepare,
+} from "nitropack"
+import ora from "ora"
+import colors from "picocolors"
+import { RollupOutput } from "rollup"
+import path from "upath"
+import { InlineConfig, ResolvedConfig, build as viteBuild } from "vite"
+
+import { Page } from "../../shared/types.js"
+import { unwrapViteId } from "../../shared/utils.js"
+import { SSR_ENTRY_FILE } from "../constants.js"
+import { initNitro } from "../nitro/init.js"
+import { ServiteConfig } from "../types.js"
 
 export async function build(inlineConfig: InlineConfig) {
-  return new Builder(inlineConfig).build();
+  return new Builder(inlineConfig).build()
 }
 
 class Builder {
   constructor(private inlineConfig?: InlineConfig) {}
 
   baseBuild = async (extraConfig?: InlineConfig) => {
-    let viteConfig = {} as ResolvedConfig;
-    let serviteConfig = {} as ServiteConfig;
-    let outDir = 'dist';
-    let pages: Page[] = [];
+    let viteConfig = {} as ResolvedConfig
+    let serviteConfig = {} as ServiteConfig
+    let outDir = "dist"
+    let pages: Page[] = []
 
-    const { outDir: extraOutDir } = extraConfig?.build || {};
+    const { outDir: extraOutDir } = extraConfig?.build || {}
 
-    delete extraConfig?.build?.outDir;
+    delete extraConfig?.build?.outDir
 
     const getPlugin = (name: string) => {
-      const plugin = viteConfig.plugins.find(p => p.name === name);
+      const plugin = viteConfig.plugins.find((p) => p.name === name)
       if (!plugin) {
-        throw new Error(`vite plugin "${name}" not found`);
+        throw new Error(`vite plugin "${name}" not found`)
       }
-      return plugin;
-    };
+      return plugin
+    }
 
     const rollupOutput = (await viteBuild({
       ...this.inlineConfig,
-      logLevel: extraConfig?.logLevel || 'info',
+      logLevel: extraConfig?.logLevel || "info",
       plugins: [
         ...(this.inlineConfig?.plugins || []),
         ...(extraConfig?.plugins || []),
         {
-          name: 'servite:build:base',
-          enforce: 'post',
+          name: "servite:build:base",
+          enforce: "post",
           config() {
             return {
               ...extraConfig,
@@ -65,31 +66,29 @@ class Builder {
                   plugins: [nodeResolve() as any],
                 },
               },
-            };
+            }
           },
           async configResolved(config) {
-            viteConfig = config;
+            viteConfig = config
 
             // Save servite config
-            serviteConfig = (
-              getPlugin('servite').api as any
-            ).getServiteConfig();
+            serviteConfig = (getPlugin("servite").api as any).getServiteConfig()
 
             // Save some config for generate bootstrap code and ssg
-            ({ outDir } = config.build);
+            ;({ outDir } = config.build)
 
             // Append extraOutDir
             if (extraOutDir) {
-              config.build.outDir = path.join(outDir, extraOutDir);
+              config.build.outDir = path.join(outDir, extraOutDir)
             }
           },
           async buildEnd() {
             // Save pages to prerender
-            pages = await (getPlugin('servite:pages').api as any).getPages();
+            pages = await (getPlugin("servite:pages").api as any).getPages()
           },
         },
       ],
-    })) as RollupOutput;
+    })) as RollupOutput
 
     return {
       rollupOutput,
@@ -97,35 +96,35 @@ class Builder {
       serviteConfig,
       outDir,
       pages,
-    };
-  };
+    }
+  }
 
   clientBuild = async () => {
-    process.env.SERVITE_CLIENT_BUILD = '1';
+    process.env.SERVITE_CLIENT_BUILD = "1"
 
     return this.baseBuild({
       build: {
         ssrManifest: true, // generate ssr manifest while client bundle
       },
-    });
-  };
+    })
+  }
 
   ssrBuild = async () => {
-    process.env.SERVITE_SSR_BUILD = '1';
+    process.env.SERVITE_SSR_BUILD = "1"
 
     return this.baseBuild({
       build: {
-        outDir: 'ssr',
+        outDir: "ssr",
         ssr: SSR_ENTRY_FILE,
       },
-    });
-  };
+    })
+  }
 
   islandsBuild = async (nitro: Nitro, input: string) => {
-    process.env.SERVITE_ISLANDS_BUILD = '1';
+    process.env.SERVITE_ISLANDS_BUILD = "1"
 
     return this.baseBuild({
-      logLevel: 'warn',
+      logLevel: "warn",
       build: {
         emptyOutDir: false,
         rollupOptions: {
@@ -136,83 +135,83 @@ class Builder {
       },
       plugins: [
         {
-          name: 'servite:build:islands',
+          name: "servite:build:islands",
           config(config) {
             return {
               build: {
                 outDir: path.relative(
-                  config.root || '',
-                  nitro.options.output.publicDir
+                  config.root || "",
+                  nitro.options.output.publicDir,
                 ),
               },
-            };
+            }
           },
           generateBundle(_options, bundle) {
             // Delete unused asset
             for (const name in bundle) {
               if (
-                bundle[name].type === 'asset' &&
+                bundle[name].type === "asset" &&
                 bundle[name].fileName.length > 100
               ) {
-                delete bundle[name];
+                delete bundle[name]
               }
             }
           },
         },
       ],
-    });
-  };
+    })
+  }
 
   prerender = async (nitro: Nitro, clientEntryUrl: string) => {
-    const prerenderRoutes = nitro.options.prerender.routes;
+    const prerenderRoutes = nitro.options.prerender.routes
 
     if (!prerenderRoutes.length) {
-      return;
+      return
     }
 
-    await nitroPrerender(nitro);
+    await nitroPrerender(nitro)
 
-    const spinner = ora('Building islands scripts');
-    const islandsFileNames: string[] = [];
-    let viteConfig = {} as ResolvedConfig;
+    const spinner = ora("Building islands scripts")
+    const islandsFileNames: string[] = []
+    let viteConfig = {} as ResolvedConfig
 
     await Promise.all(
-      nitro.options.prerender.routes.map(async routePath => {
+      nitro.options.prerender.routes.map(async (routePath) => {
         const htmlPath = path.join(
           nitro.options.output.publicDir,
           routePath,
-          'index.html'
-        );
+          "index.html",
+        )
 
         if (!fs.existsSync(htmlPath)) {
-          return;
+          return
         }
 
-        const htmlCode = await fs.readFile(htmlPath, 'utf-8');
+        const htmlCode = await fs.readFile(htmlPath, "utf-8")
 
         const [, islandsUrl] =
           htmlCode.match(
-            /<script.*?src="(\/@id\/virtual:servite\/islands\/.*?)"/
-          ) || [];
+            /<script.*?src="(\/@id\/virtual:servite\/islands\/.*?)"/,
+          ) || []
 
         if (!islandsUrl) {
-          return;
+          return
         }
 
         if (!spinner.isSpinning) {
-          emptyLine();
-          spinner.start();
+          emptyLine()
+          spinner.start()
         }
 
         // Build islands
         const { rollupOutput, viteConfig: _viteConfig } =
-          await this.islandsBuild(nitro, unwrapViteId(islandsUrl));
+          await this.islandsBuild(nitro, unwrapViteId(islandsUrl))
 
-        viteConfig = _viteConfig;
+        viteConfig = _viteConfig
 
-        const newIslandsUrl = getEntryUrl(rollupOutput, viteConfig);
+        const newIslandsUrl = getEntryUrl(rollupOutput, viteConfig)
 
-        islandsFileNames.push(rollupOutput.output[0].fileName);
+        islandsFileNames.push(rollupOutput.output[0].fileName)
 
         // Modify prerender html file
         await fs.outputFile(
@@ -220,45 +219,44 @@ class Builder {
           htmlCode
             .replace(
               new RegExp(`<script.*?src="${clientEntryUrl}".*?</script>`), // Remove client entry
-              ''
+              "",
             )
             .replace(islandsUrl, newIslandsUrl),
-          'utf-8'
-        );
-      })
-    );
+          "utf-8",
+        )
+      }),
+    )
 
     if (spinner.isSpinning) {
-      const maxLength = Math.max(...islandsFileNames.map(name => name.length));
+      const maxLength = Math.max(...islandsFileNames.map((name) => name.length))
 
-      spinner.succeed(`${islandsFileNames.length} islands scripts built.`);
+      spinner.succeed(`${islandsFileNames.length} islands scripts built.`)
 
       islandsFileNames.forEach((name, index) => {
         printAsset(
           viteConfig,
           maxLength,
           name,
-          index === islandsFileNames.length - 1
-        );
-      });
+          index === islandsFileNames.length - 1,
+        )
+      })
     }
-  };
+  }
 
   build = async () => {
     // Client bundle
-    const { rollupOutput, viteConfig, serviteConfig } =
-      await this.clientBuild();
-    const clientEntryUrl = getEntryUrl(rollupOutput, viteConfig);
+    const { rollupOutput, viteConfig, serviteConfig } = await this.clientBuild()
+    const clientEntryUrl = getEntryUrl(rollupOutput, viteConfig)
 
-    let pages: Page[] = [];
+    let pages: Page[] = []
 
     if (!serviteConfig.csr) {
-      emptyLine();
+      emptyLine()
       // SSR bundle
-      ({ pages } = await this.ssrBuild());
+      ;({ pages } = await this.ssrBuild())
     }
 
-    emptyLine();
+    emptyLine()
 
     const nitro = await initNitro({
       serviteConfig,
@@ -269,54 +267,54 @@ class Builder {
           routes: getPrerenderRoutes(pages, serviteConfig),
         },
       },
-    });
+    })
 
-    await prepare(nitro);
-    await copyServerAssets(viteConfig);
-    await copyPublicAssets(nitro);
+    await prepare(nitro)
+    await copyServerAssets(viteConfig)
+    await copyPublicAssets(nitro)
 
     if (serviteConfig.csr) {
-      await copyCsrHtml(viteConfig, nitro);
+      await copyCsrHtml(viteConfig, nitro)
     } else {
       // Prerender
-      await this.prerender(nitro, clientEntryUrl);
-      emptyLine();
+      await this.prerender(nitro, clientEntryUrl)
+      emptyLine()
     }
 
     // Build nitro output
-    await nitroBuild(nitro);
-    await nitro.close();
-  };
+    await nitroBuild(nitro)
+    await nitro.close()
+  }
 }
 
 function emptyLine() {
   // eslint-disable-next-line no-console
-  console.log('');
+  console.log("")
 }
 
 function getEntryUrl(rollupOutput: RollupOutput, viteConfig: ResolvedConfig) {
-  return path.join(viteConfig.base || '/', rollupOutput.output[0].fileName);
+  return path.join(viteConfig.base || "/", rollupOutput.output[0].fileName)
 }
 
 function getPrerenderRoutes(pages: Page[], { ssg, csr }: ServiteConfig) {
   if (csr || !ssg || (Array.isArray(ssg) && !ssg.length)) {
-    return [];
+    return []
   }
 
-  const allRoutes = pages.filter(p => !p.isLayout).map(p => p.routePath);
+  const allRoutes = pages.filter((p) => !p.isLayout).map((p) => p.routePath)
 
   if (ssg === true) {
-    return allRoutes;
+    return allRoutes
   }
 
-  return mm(allRoutes, ssg);
+  return mm(allRoutes, ssg)
 }
 
 async function copyCsrHtml(viteConfig: ResolvedConfig, nitro: Nitro) {
   await fs.copy(
-    path.resolve(viteConfig.root, viteConfig.build.outDir, 'index.html'),
-    path.resolve(nitro.options.output.publicDir, 'index.html')
-  );
+    path.resolve(viteConfig.root, viteConfig.build.outDir, "index.html"),
+    path.resolve(nitro.options.output.publicDir, "index.html"),
+  )
 }
 
 /**
@@ -325,40 +323,40 @@ async function copyCsrHtml(viteConfig: ResolvedConfig, nitro: Nitro) {
  */
 async function copyServerAssets(viteConfig: ResolvedConfig) {
   await Promise.all(
-    ['index.html', 'ssr-manifest.json'].map(filePath =>
+    ["index.html", "ssr-manifest.json"].map((filePath) =>
       fs.copy(
         path.resolve(viteConfig.root, viteConfig.build.outDir, filePath),
         path.resolve(
           viteConfig.root,
           viteConfig.build.outDir,
-          '.output/server-assets',
-          filePath
-        )
-      )
-    )
-  );
+          ".output/server-assets",
+          filePath,
+        ),
+      ),
+    ),
+  )
 }
 
 function printAsset(
   viteConfig: ResolvedConfig,
   maxLength: number,
   fileName: string,
-  isLast: boolean
+  isLast: boolean,
 ) {
   const {
     root,
     build: { outDir, chunkSizeWarningLimit },
-  } = viteConfig;
-  const prefixChar = isLast ? '└─' : '├─';
-  const filePath = path.resolve(root, outDir, fileName);
-  const content = fs.readFileSync(filePath);
-  const kb = content.length / 1024;
-  const gzipKb = gzipSizeSync(content) / 1024;
-  const sizeColor = kb > chunkSizeWarningLimit ? colors.yellow : colors.dim;
+  } = viteConfig
+  const prefixChar = isLast ? "└─" : "├─"
+  const filePath = path.resolve(root, outDir, fileName)
+  const content = fs.readFileSync(filePath)
+  const kb = content.length / 1024
+  const gzipKb = gzipSizeSync(content) / 1024
+  const sizeColor = kb > chunkSizeWarningLimit ? colors.yellow : colors.dim
 
   process.stdout.write(
-    `  ${colors.gray(`${prefixChar} ${path.join(outDir, '/')}`)}${colors.cyan(
-      fileName.padEnd(maxLength + 3)
-    )}${sizeColor(`${kb.toFixed(2)} KiB | gzip: ${gzipKb.toFixed(2)} KiB`)}\n`
-  );
+    `  ${colors.gray(`${prefixChar} ${path.join(outDir, "/")}`)}${colors.cyan(
+      fileName.padEnd(maxLength + 3),
+    )}${sizeColor(`${kb.toFixed(2)} KiB | gzip: ${gzipKb.toFixed(2)} KiB`)}\n`,
+  )
 }

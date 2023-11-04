@@ -12,9 +12,10 @@ To check out docs, visit https://codpoe.github.io/servite/ or https://servite.ve
 - 🏝 Support islands architecture
 - 🔥 Powered by [nitro](https://github.com/unjs/nitro)
 
-
 ---
+
 ## TODO
+
 - [x] optional ssr / ssg
   - header: no ssr
 - [x] loader params ctx
@@ -32,7 +33,7 @@ To check out docs, visit https://codpoe.github.io/servite/ or https://servite.ve
   - [x] build islands, island-hydrate
   - [x] modify prerender html file
 - [x] conflict with complete client hydration
-- [x] __islandClient
+- [x] \_\_islandClient
 - [x] collect all matched routes css
 - [x] upgrade vite@3.2
 - [x] dev hmr

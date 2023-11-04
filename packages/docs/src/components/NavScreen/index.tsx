@@ -1,29 +1,30 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { useAppState } from 'servite/client';
-import { NavItem as INavItem } from '@/types';
-import { useSiteState } from '@/context';
-import { useActiveMatch } from '@/hooks/useActiveMatch';
-import { ChevronRight } from '../Icons';
-import { Link } from '../Link';
-import { ThemeModeSwitch } from '../ThemeModeSwitch';
-import { IconNav } from '../Nav';
-import { TextWithIcon } from '../TextWithIcon';
+import { useSiteState } from "@/context"
+import { useActiveMatch } from "@/hooks/useActiveMatch"
+import { NavItem as INavItem } from "@/types"
+import { createContext, useContext, useEffect, useState } from "react"
+import { CSSTransition } from "react-transition-group"
+import { useAppState } from "servite/client"
 
-import './index.css';
+import { ChevronRight } from "../Icons"
+import { Link } from "../Link"
+import { IconNav } from "../Nav"
+import { TextWithIcon } from "../TextWithIcon"
+import { ThemeModeSwitch } from "../ThemeModeSwitch"
+
+import "./index.css"
 
 const navScreenContext = createContext<{
-  screenOpen: boolean;
-  toggleScreen: () => void;
-}>(null!);
+  screenOpen: boolean
+  toggleScreen: () => void
+}>(null!)
 
-const useNavScreenContext = () => useContext(navScreenContext);
+const useNavScreenContext = () => useContext(navScreenContext)
 
 function Hamburger() {
-  const { screenOpen, toggleScreen } = useNavScreenContext();
+  const { screenOpen, toggleScreen } = useNavScreenContext()
 
   const className =
-    'w-full h-0.5 bg-c-text-0 rounded-full absolute left-0 transition-all';
+    "w-full h-0.5 bg-c-text-0 rounded-full absolute left-0 transition-all"
 
   return (
     <button
@@ -35,42 +36,42 @@ function Hamburger() {
           className={`${className} top-0
             ${
               screenOpen
-                ? 'translate-y-1.5 -rotate-45'
-                : 'group-hover:translate-x-1'
+                ? "translate-y-1.5 -rotate-45"
+                : "group-hover:translate-x-1"
             }
           `}
         />
         <div
           className={`${className} top-1.5 translate-x-2
             ${
-              screenOpen ? 'opacity-0' : 'opacity-100 group-hover:translate-x-0'
+              screenOpen ? "opacity-0" : "opacity-100 group-hover:translate-x-0"
             }
           `}
         />
         <div
           className={`${className} bottom-0 translate-x-1 ${
             screenOpen
-              ? 'translate-x-0 -translate-y-1.5 rotate-45'
-              : 'group-hover:translate-x-2'
+              ? "translate-x-0 -translate-y-1.5 rotate-45"
+              : "group-hover:translate-x-2"
           }`}
         />
       </div>
     </button>
-  );
+  )
 }
 
 function NavItem({ item }: { item: INavItem }) {
-  const { toggleScreen } = useNavScreenContext();
-  const [expanded, setExpanded] = useState(false);
-  const active = useActiveMatch(item);
+  const { toggleScreen } = useNavScreenContext()
+  const [expanded, setExpanded] = useState(false)
+  const active = useActiveMatch(item)
 
-  const hasItems = Boolean(item.items?.length);
+  const hasItems = Boolean(item.items?.length)
 
   const content = (
     <div className="flex justify-between items-center h-12 cursor-pointer">
       <span
         className={`flex items-center font-medium
-          ${active ? 'text-c-brand' : 'text-c-text-0'}
+          ${active ? "text-c-brand" : "text-c-text-0"}
         `}
       >
         <TextWithIcon text={item.text} icon={item.icon} space="8px" />
@@ -78,17 +79,17 @@ function NavItem({ item }: { item: INavItem }) {
       {hasItems && (
         <ChevronRight
           className={`text-c-text-2 transition-transform ${
-            expanded ? 'rotate-90' : ''
+            expanded ? "rotate-90" : ""
           }`}
         />
       )}
     </div>
-  );
+  )
 
   return (
     <div className="border-b border-c-border-1 text-sm">
       {hasItems ? (
-        <div onClick={() => setExpanded(prev => !prev)}>{content}</div>
+        <div onClick={() => setExpanded((prev) => !prev)}>{content}</div>
       ) : (
         <Link to={item.link} onClick={toggleScreen}>
           {content}
@@ -102,17 +103,17 @@ function NavItem({ item }: { item: INavItem }) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function SubNavItem({ item }: { item: INavItem }) {
-  const { toggleScreen } = useNavScreenContext();
-  const active = useActiveMatch(item);
+  const { toggleScreen } = useNavScreenContext()
+  const active = useActiveMatch(item)
 
   return (
     <Link
       className={`flex items-center h-8 px-4 ${
-        active ? 'text-c-brand' : 'text-c-text-0'
+        active ? "text-c-brand" : "text-c-text-0"
       }`}
       to={item.link}
       color={false}
@@ -120,22 +121,22 @@ function SubNavItem({ item }: { item: INavItem }) {
     >
       <TextWithIcon text={item.text} icon={item.icon} space="8px" />
     </Link>
-  );
+  )
 }
 
 export function NavScreen() {
-  const { textNav } = useSiteState();
-  const { pagePath } = useAppState();
-  const [open, setOpen] = useState(false);
+  const { textNav } = useSiteState()
+  const { pagePath } = useAppState()
+  const [open, setOpen] = useState(false)
 
   const toggleScreen = () => {
-    setOpen(prev => !prev);
-  };
+    setOpen((prev) => !prev)
+  }
 
   // close nav-screen when path is changed
   useEffect(() => {
-    setOpen(false);
-  }, [pagePath]);
+    setOpen(false)
+  }, [pagePath])
 
   return (
     <navScreenContext.Provider value={{ screenOpen: open, toggleScreen }}>
@@ -161,5 +162,5 @@ export function NavScreen() {
         </div>
       </CSSTransition>
     </navScreenContext.Provider>
-  );
+  )
 }

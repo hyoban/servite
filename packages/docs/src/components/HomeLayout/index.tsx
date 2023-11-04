@@ -1,30 +1,31 @@
-import React from 'react';
-import { Outlet, useAppState } from 'servite/client';
-import { Mdx } from '../Mdx';
-import { Footer } from '../Footer';
-import { Button } from '../Button';
-import { Link } from '../Link';
+import React from "react"
+import { Outlet, useAppState } from "servite/client"
+
+import { Button } from "../Button"
+import { Footer } from "../Footer"
+import { Link } from "../Link"
+import { Mdx } from "../Mdx"
 
 interface HomePageMeta {
-  heroImage?: string;
-  heroText?: React.ReactNode;
-  tagline?: React.ReactNode;
-  actions?: { text: React.ReactNode; link: string }[];
-  features?: { title?: React.ReactNode; details?: React.ReactNode }[];
-  footer?: React.ReactNode;
+  heroImage?: string
+  heroText?: React.ReactNode
+  tagline?: React.ReactNode
+  actions?: { text: React.ReactNode; link: string }[]
+  features?: { title?: React.ReactNode; details?: React.ReactNode }[]
+  footer?: React.ReactNode
 }
 
 export function HomeLayout() {
-  const { pageData } = useAppState();
+  const { pageData } = useAppState()
   const { heroImage, heroText, tagline, actions, features, footer } =
-    (pageData?.meta || {}) as HomePageMeta;
+    (pageData?.meta || {}) as HomePageMeta
 
   return (
     <div className="max-w-screen-lg px-6 mx-auto h-full flex flex-col">
       <div className="flex-1 divide-y divide-c-border-1">
         <header className="py-12 md:pt-20 md:pb-16 text-center">
           {heroImage &&
-            (heroImage.includes('/') ? (
+            (heroImage.includes("/") ? (
               <img
                 src={heroImage}
                 alt="hero"
@@ -51,7 +52,7 @@ export function HomeLayout() {
             <div className="mt-8 flex justify-center space-x-4 md:space-x-5">
               {actions.map((action, index) => (
                 <Link key={index} to={action.link} color={false}>
-                  <Button type={index === 0 ? 'primary' : 'secondary'}>
+                  <Button type={index === 0 ? "primary" : "secondary"}>
                     {action.text}
                   </Button>
                 </Link>
@@ -81,5 +82,5 @@ export function HomeLayout() {
       </div>
       {footer && <Footer>{footer}</Footer>}
     </div>
-  );
+  )
 }

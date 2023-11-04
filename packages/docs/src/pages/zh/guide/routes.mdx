@@ -53,30 +53,30 @@ src/pages
 ```tsx
 const routes = [
   {
-    path: '/*',
+    path: "/*",
     element: <Layout />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <Index />,
       },
       {
-        path: '/dashboard/*',
+        path: "/dashboard/*",
         element: <DashboardLayout />,
         children: [
           {
-            path: '/dashboard/analytics',
+            path: "/dashboard/analytics",
             element: <Analytics />,
           },
           {
-            path: '/dashboard/settings',
+            path: "/dashboard/settings",
             element: <Settings />,
           },
         ],
       },
     ],
   },
-];
+]
 ```
 
 ## API 路由
@@ -88,15 +88,16 @@ servite 的 API 功能是由 Nitro 驱动的，完整的 API 路由文档请查�
 文件 `<root>/src/server/api/todo.get.ts` 有如下内容：
 
 ```ts
-import { eventHandler } from 'servite/server';
-export default eventHandler(async event => {
+import { eventHandler } from "servite/server"
+
+export default eventHandler(async (event) => {
   // ...
   return {
     code: 0,
-    msg: 'ok',
-    data: 'This is ok',
-  };
-});
+    msg: "ok",
+    data: "This is ok",
+  }
+})
 ```
 
 由此你就得到了一个 `GET /api/todo` 的 HTTP 接口，这里面有几个点：
@@ -109,8 +110,9 @@ export default eventHandler(async event => {
 而为了便于快速开发，Servite 内置了 [ofetch](https://github.com/unjs/ofetch) 请求库，你可以通过 `servite/client` 导入 `ofetch` 的相关方法：
 
 ```ts
-import { ofetch } from 'servite/client';
-ofetch('/api/todo');
+import { ofetch } from "servite/client"
+
+ofetch("/api/todo")
 ```
 
 :::tip[进阶]

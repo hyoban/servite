@@ -1,25 +1,25 @@
-import './layout.css';
+import "./layout.css"
 
-import { useMemo } from 'react';
-import { useAppState, Helmet, Outlet } from 'servite/client';
-import { createSiteState, siteContext } from '@/context';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@/constants';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
-import { Header } from '@/components/Header';
-import { DocLayout } from '@/components/DocLayout';
-import { HomeLayout } from '@/components/HomeLayout';
+import { DocLayout } from "@/components/DocLayout"
+import { Header } from "@/components/Header"
+import { HomeLayout } from "@/components/HomeLayout"
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/constants"
+import { createSiteState, siteContext } from "@/context"
+import { useScrollToTop } from "@/hooks/useScrollToTop"
+import { useMemo } from "react"
+import { Helmet, Outlet, useAppState } from "servite/client"
 
 export default function Layout() {
-  const appState = useAppState();
-  const { pagePath, pageData } = appState;
+  const appState = useAppState()
+  const { pagePath, pageData } = appState
 
-  const siteState = useMemo(() => createSiteState(appState), [appState]);
-  const { currentLocale } = siteState;
+  const siteState = useMemo(() => createSiteState(appState), [appState])
+  const { currentLocale } = siteState
 
-  useScrollToTop();
+  useScrollToTop()
 
   if (!pagePath || !pageData) {
-    return null;
+    return null
   }
 
   return (
@@ -40,5 +40,5 @@ export default function Layout() {
         )}
       </siteContext.Provider>
     </>
-  );
+  )
 }

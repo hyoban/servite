@@ -1,25 +1,27 @@
-import { THEME_MODE_STORAGE_KEY } from '@/constants';
-import { getThemeMode } from '@/utils';
-import { Sun, Moon } from '../Icons';
-import './index.css';
+import { THEME_MODE_STORAGE_KEY } from "@/constants"
+import { getThemeMode } from "@/utils"
+
+import { Moon, Sun } from "../Icons"
+
+import "./index.css"
 
 export interface ThemeModeSwitchProps {
-  showLabel?: boolean;
-  className?: string;
+  showLabel?: boolean
+  className?: string
 }
 
 export function ThemeModeSwitch({
   showLabel,
-  className = '',
+  className = "",
 }: ThemeModeSwitchProps) {
   const handleSwitch = () => {
-    const themeMode = getThemeMode();
+    const themeMode = getThemeMode()
     window.localStorage.setItem(
       THEME_MODE_STORAGE_KEY,
-      themeMode === 'light' ? 'dark' : 'light'
-    );
-    document.documentElement.classList.toggle('dark');
-  };
+      themeMode === "light" ? "dark" : "light",
+    )
+    document.documentElement.classList.toggle("dark")
+  }
 
   const content = (
     <div
@@ -31,7 +33,7 @@ export function ThemeModeSwitch({
         <Moon className="theme-mode-switch__moon absolute top-0.5 left-0.5 text-sm transition-all text-c-text-0" />
       </div>
     </div>
-  );
+  )
 
   if (showLabel) {
     return (
@@ -41,8 +43,8 @@ export function ThemeModeSwitch({
         </span>
         {content}
       </div>
-    );
+    )
   }
 
-  return <div className={className}>{content}</div>;
+  return <div className={className}>{content}</div>
 }

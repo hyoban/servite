@@ -1,4 +1,4 @@
-import { apiHandler } from 'servite/server';
+import { apiHandler } from "servite/server"
 
 export enum Bar {
   Great,
@@ -6,22 +6,22 @@ export enum Bar {
 }
 
 export interface Args {
-  foo: string;
-  bar?: Bar;
+  foo: string
+  bar?: Bar
 }
 
 export interface Result {
-  code: number;
-  msg: string;
-  data?: string;
+  code: number
+  msg: string
+  data?: string
 }
 
 export default apiHandler<Args, Result>((args, event) => {
   // eslint-disable-next-line no-console
-  console.log('api eventHandler', args, event.path);
+  console.log("api eventHandler", args, event.path)
   return {
     code: 0,
-    msg: 'ok',
+    msg: "ok",
     data: event.path,
-  };
-});
+  }
+})

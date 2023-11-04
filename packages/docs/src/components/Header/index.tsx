@@ -1,13 +1,14 @@
-import { Link } from 'servite/client';
-import { useSiteState } from '@/context';
-import { SITE_TITLE } from '@/constants';
-import { TextNav, IconNav } from '../Nav';
-import { Search } from '../Search';
-import { ThemeModeSwitch } from '../ThemeModeSwitch';
-import { NavScreen } from '../NavScreen';
+import { SITE_TITLE } from "@/constants"
+import { useSiteState } from "@/context"
+import { Link } from "servite/client"
+
+import { IconNav, TextNav } from "../Nav"
+import { NavScreen } from "../NavScreen"
+import { Search } from "../Search"
+import { ThemeModeSwitch } from "../ThemeModeSwitch"
 
 export function Header() {
-  const { currentLocale } = useSiteState();
+  const { currentLocale } = useSiteState()
 
   return (
     <div className="sticky top-0 w-full z-[var(--z-index-header)]">
@@ -18,29 +19,29 @@ export function Header() {
         <div className="h-full max-w-8xl mx-auto px-6 flex items-center">
           <Link
             className="h-full flex items-center space-x-2 hover:opacity-80 transition-opacity"
-            to={currentLocale.localePath || ''}
+            to={currentLocale.localePath || ""}
           >
             <h1 className="text-lg font-medium tracking-wide text-c-text-0">
               {SITE_TITLE}
             </h1>
           </Link>
           <div className="h-full hidden md:block">
-            <Search __island={'visible'} />
+            <Search __island={"visible"} />
           </div>
           <div className="h-full ml-auto -mr-2 hidden md:flex items-center">
             <TextNav />
             <ThemeModeSwitch
-              __island={'visible'}
+              __island={"visible"}
               className="ml-4 pl-4 mr-2 border-l border-c-border-1"
             />
             <IconNav size="small" />
           </div>
           <div className="h-full ml-auto -mr-4 flex md:hidden items-center">
-            <Search __island={'visible'} iconOnly />
-            <NavScreen __island={'visible'} />
+            <Search __island={"visible"} iconOnly />
+            <NavScreen __island={"visible"} />
           </div>
         </div>
       </header>
     </div>
-  );
+  )
 }

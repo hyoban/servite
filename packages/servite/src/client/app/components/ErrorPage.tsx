@@ -1,11 +1,11 @@
-import { PageError } from '../types';
+import { PageError } from "../types"
 
 export interface ErrorPageProps {
-  error: PageError;
+  error: PageError
 }
 
 export const ErrorPage: React.FC<ErrorPageProps> = ({ error }) => {
-  const title = error.isNotFound ? '404' : error.name;
+  const title = error.isNotFound ? "404" : error.name
 
   return (
     <>
@@ -41,20 +41,20 @@ body {
         style={{
           fontFamily:
             '-apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <h1
           className="servite-error-h1"
           style={{
             margin: 0,
-            fontSize: '128px',
+            fontSize: "128px",
             fontWeight: 900,
             lineHeight: 1,
           }}
@@ -63,11 +63,11 @@ body {
         </h1>
         <p
           className="servite-error-p"
-          style={{ marginTop: '16px', fontSize: '16px', lineHeight: 1.5 }}
+          style={{ marginTop: "16px", fontSize: "16px", lineHeight: 1.5 }}
         >
           {error.message}
         </p>
       </div>
     </>
-  );
-};
+  )
+}

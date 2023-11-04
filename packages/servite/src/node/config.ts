@@ -1,22 +1,23 @@
-import assert from 'assert';
-import { ServiteConfig, UserServiteConfig } from './types.js';
+import assert from "assert"
+
+import { ServiteConfig, UserServiteConfig } from "./types.js"
 
 export function resolveServiteConfig(
-  userServiteConfig: UserServiteConfig = {}
+  userServiteConfig: UserServiteConfig = {},
 ): ServiteConfig {
   const {
-    pagesDirs = [{ dir: 'src/pages' }],
+    pagesDirs = [{ dir: "src/pages" }],
     ssg = false,
     csr = false,
     ...rest
-  } = userServiteConfig;
+  } = userServiteConfig
 
-  assert(pagesDirs.length, 'pagesDirs is empty');
+  assert(pagesDirs.length, "pagesDirs is empty")
 
   return {
     ...rest,
     pagesDirs,
     ssg,
     csr,
-  };
+  }
 }

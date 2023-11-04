@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState } from "react"
 
 export function CounterVisible({
   children,
   initialCount = 0,
 }: {
-  children?: React.ReactNode;
-  initialCount?: number;
+  children?: React.ReactNode
+  initialCount?: number
 }) {
-  const [count, setCount] = useState(initialCount);
-  const add = () => setCount(i => i + 1);
-  const subtract = () => setCount(i => i - 1);
+  const [count, setCount] = useState(initialCount)
+  const add = () => setCount((i) => i + 1)
+  const subtract = () => setCount((i) => i - 1)
 
   return (
     <div>
@@ -32,5 +32,5 @@ export function CounterVisible({
         }
       `}</style>
     </div>
-  );
+  )
 }

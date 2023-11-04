@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import './Counter.css';
+import { useState } from "react"
+
+import "./Counter.css"
 
 export function Counter({
   children,
   initialCount = 0,
 }: {
-  children?: React.ReactNode;
-  initialCount?: number;
+  children?: React.ReactNode
+  initialCount?: number
 }) {
-  const [count, setCount] = useState(initialCount);
-  const add = () => setCount(i => i + 1);
-  const subtract = () => setCount(i => i - 1);
+  const [count, setCount] = useState(initialCount)
+  const add = () => setCount((i) => i + 1)
+  const subtract = () => setCount((i) => i - 1)
 
   return (
     <div>
@@ -21,5 +22,5 @@ export function Counter({
       </div>
       <div className="counter-message">{children}</div>
     </div>
-  );
+  )
 }

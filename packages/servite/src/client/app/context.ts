@@ -1,6 +1,7 @@
-import { createContext, useContext } from 'react';
-import { ssrData } from './constants.js';
-import { AppState } from './types.js';
+import { createContext, useContext } from "react"
+
+import { ssrData } from "./constants.js"
+import { AppState } from "./types.js"
 
 export const appContext = createContext<AppState>({
   ...ssrData?.appState,
@@ -8,18 +9,18 @@ export const appContext = createContext<AppState>({
   pages: [],
   pageLoading: false,
   pageError: null,
-});
+})
 
 /**
  * get app state
  */
 export function useAppState() {
-  return useContext(appContext);
+  return useContext(appContext)
 }
 
 /**
  * get loader data
  */
 export function useLoaderData<T = any>(): T {
-  return useAppState().loaderData as T;
+  return useAppState().loaderData as T
 }

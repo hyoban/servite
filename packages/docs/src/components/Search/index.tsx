@@ -1,89 +1,90 @@
 /**
  * Based on @docusaurus/theme-search-algolia
  */
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Link, Helmet, useNavigate, isBrowser } from 'servite/client';
-import { useDocSearchKeyboardEvents } from '@docsearch/react';
-import { ALGOLIA_CONFIG, IN_BROWSER, LOCALES } from '@/constants';
-import { useSiteState } from '@/context';
-import { removeTailSlash } from '@/utils';
-import { Search as IconSearch, Command as IconCommand } from '../Icons';
+import { ALGOLIA_CONFIG, IN_BROWSER, LOCALES } from "@/constants"
+import { useSiteState } from "@/context"
+import { removeTailSlash } from "@/utils"
+import { useDocSearchKeyboardEvents } from "@docsearch/react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { Helmet, isBrowser, Link, useNavigate } from "servite/client"
 
-let DocSearchModal: React.ComponentType<any> | null = null;
+import { Command as IconCommand, Search as IconSearch } from "../Icons"
+
+let DocSearchModal: React.ComponentType<any> | null = null
 
 async function ensureDocSearchModal() {
   if (DocSearchModal) {
-    return;
+    return
   }
 
-  [{ DocSearchModal }] = await Promise.all([
+  ;[{ DocSearchModal }] = await Promise.all([
     // @ts-ignore
-    import('@docsearch/react/modal'),
+    import("@docsearch/react/modal"),
     // @ts-ignore
-    import('@docsearch/react/style'),
-  ]);
+    import("@docsearch/react/style"),
+  ])
 }
 
 function Hit({ hit, children }: { hit: any; children?: React.ReactNode }) {
-  return <Link to={hit.url}>{children}</Link>;
+  return <Link to={hit.url}>{children}</Link>
 }
 
 export function Search({ iconOnly }: { iconOnly?: boolean }) {
-  const routerNavigate = useNavigate();
-  const { currentLocale } = useSiteState();
-  const searchButtonRef = useRef<HTMLButtonElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const routerNavigate = useNavigate()
+  const { currentLocale } = useSiteState()
+  const searchButtonRef = useRef<HTMLButtonElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
   const onOpen = useCallback(async () => {
-    await ensureDocSearchModal();
-    setIsOpen(true);
-  }, [setIsOpen]);
+    await ensureDocSearchModal()
+    setIsOpen(true)
+  }, [setIsOpen])
 
   const onClose = useCallback(() => {
-    setIsOpen(false);
-  }, [setIsOpen]);
+    setIsOpen(false)
+  }, [setIsOpen])
 
   const transformItems = useCallback((items: any[]) => {
-    return items.map(item => {
-      const { pathname, hash } = new URL(item.url);
+    return items.map((item) => {
+      const { pathname, hash } = new URL(item.url)
       return {
         ...item,
         url: `${removeTailSlash(import.meta.env.BASE_URL)}${pathname}${hash}`,
-      };
-    });
-  }, []);
+      }
+    })
+  }, [])
 
   const navigator = useRef({
     navigate({ item }: any) {
       if (item?.url) {
-        routerNavigate(item.url);
+        routerNavigate(item.url)
       }
     },
-  }).current;
+  }).current
 
   // if has multiple locales,
   // the search results should be filtered based on the language
   const facetFilters = useMemo(() => {
-    let userFacetFilters = ALGOLIA_CONFIG?.searchParameters?.facetFilters || [];
+    let userFacetFilters = ALGOLIA_CONFIG?.searchParameters?.facetFilters || []
     userFacetFilters =
-      typeof userFacetFilters === 'string'
+      typeof userFacetFilters === "string"
         ? [userFacetFilters]
-        : userFacetFilters;
+        : userFacetFilters
 
     return LOCALES.length > 1
       ? [`lang:${currentLocale.locale}`, ...userFacetFilters]
-      : userFacetFilters;
-  }, [currentLocale]);
+      : userFacetFilters
+  }, [currentLocale])
 
   useDocSearchKeyboardEvents({
     isOpen,
     onOpen,
     onClose,
-  });
+  })
 
   if (!ALGOLIA_CONFIG?.apiKey || !ALGOLIA_CONFIG?.indexName) {
-    return null;
+    return null
   }
 
   return (
@@ -96,7 +97,7 @@ export function Search({ iconOnly }: { iconOnly?: boolean }) {
           <link
             rel="preconnect"
             href={`https://${
-              ALGOLIA_CONFIG.appId || 'BH4D9OD16A'
+              ALGOLIA_CONFIG.appId || "BH4D9OD16A"
             }-dsn.algolia.net`}
             crossOrigin=""
           />
@@ -145,8 +146,8 @@ export function Search({ iconOnly }: { iconOnly?: boolean }) {
               facetFilters,
             }}
           />,
-          document.body
+          document.body,
         )}
     </>
-  );
+  )
 }

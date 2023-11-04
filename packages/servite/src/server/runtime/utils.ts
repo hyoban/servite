@@ -1,73 +1,75 @@
-import { extname } from 'path';
-import type { HtmlTagDescriptor } from 'vite';
-import { Island } from '../../shared/types.js';
+import { extname } from "path"
+
+import { Island } from "../../shared/types.js"
+
+import type { HtmlTagDescriptor } from "vite"
 
 export function lazyCachedFn<T>(fn: () => Promise<T>): () => Promise<T> {
-  let res: Promise<T> | null = null;
+  let res: Promise<T> | null = null
   return () => {
     if (res === null) {
-      res = fn().catch(err => {
-        res = null;
-        throw err;
-      });
+      res = fn().catch((err) => {
+        res = null
+        throw err
+      })
     }
-    return res;
-  };
+    return res
+  }
 }
 
 /**
  * Disable console.log
  */
 export function trapConsole() {
-  const consoleLog = global.console.log;
+  const consoleLog = global.console.log
   global.console.log = (() => {
     // ...
-  }) as any;
+  }) as any
 
   return () => {
-    global.console.log = consoleLog;
-  };
+    global.console.log = consoleLog
+  }
 }
 
 export function renderTag({
   tag,
   attrs = {},
-  children = '',
-}: Omit<HtmlTagDescriptor, 'injectTo'>) {
+  children = "",
+}: Omit<HtmlTagDescriptor, "injectTo">) {
   const attrsStr = Object.entries(attrs)
     .map(([k, v]) => {
       if (v == null) {
-        return '';
+        return ""
       }
-      if (v === '') {
-        return ` ${k}`;
+      if (v === "") {
+        return ` ${k}`
       }
-      return ` ${k}="${v}"`;
+      return ` ${k}="${v}"`
     })
-    .join('');
+    .join("")
 
-  return `<${tag}${attrsStr}>${children}</${tag}>`;
+  return `<${tag}${attrsStr}>${children}</${tag}>`
 }
 
 export function renderPreloadLink(link: string): string {
   switch (extname(link)) {
-    case '.js':
-      return `<link rel="modulepreload" crossorigin href="${link}">`;
-    case '.css':
-      return `<link rel="stylesheet" href="${link}">`;
-    case '.jpg':
-    case '.jpeg':
-      return ` <link rel="preload" href="${link}" as="image" type="image/jpeg">`;
-    case '.png':
-      return ` <link rel="preload" href="${link}" as="image" type="image/png">`;
-    case '.gif':
-      return ` <link rel="preload" href="${link}" as="image" type="image/gif">`;
-    case '.woff':
-      return ` <link rel="preload" href="${link}" as="font" type="font/woff" crossorigin>`;
-    case '.woff2':
-      return ` <link rel="preload" href="${link}" as="font" type="font/woff2" crossorigin>`;
+    case ".js":
+      return `<link rel="modulepreload" crossorigin href="${link}">`
+    case ".css":
+      return `<link rel="stylesheet" href="${link}">`
+    case ".jpg":
+    case ".jpeg":
+      return ` <link rel="preload" href="${link}" as="image" type="image/jpeg">`
+    case ".png":
+      return ` <link rel="preload" href="${link}" as="image" type="image/png">`
+    case ".gif":
+      return ` <link rel="preload" href="${link}" as="image" type="image/gif">`
+    case ".woff":
+      return ` <link rel="preload" href="${link}" as="font" type="font/woff" crossorigin>`
+    case ".woff2":
+      return ` <link rel="preload" href="${link}" as="font" type="font/woff2" crossorigin>`
     default:
-      return '';
+      return ""
   }
 }
 
@@ -98,7 +100,7 @@ export function renderPreloadLink(link: string): string {
  * window.dispatchEvent(new CustomEvent('servite:hydrate'));
  */
 export function renderIslandsCode(islands: Island[]) {
-  let index = 0;
+  let index = 0
 
   let code = `import { createElement } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
@@ -110,30 +112,30 @@ window.__SERVITE__hydrateRoot = hydrateRoot;
 ${islands
   .map(({ type, component }) => {
     const [, imported, componentPath] =
-      component.match(/(.*?)__ISLAND__(.*)/) || [];
-    const [, first, members] = imported.match(/([^.]*)(.*)/) || [];
+      component.match(/(.*?)__ISLAND__(.*)/) || []
+    const [, first, members] = imported.match(/([^.]*)(.*)/) || []
 
-    const islandName = `island_${index++}`;
+    const islandName = `island_${index++}`
 
-    if (type === 'load') {
-      const importName = `__import_${islandName}`;
+    if (type === "load") {
+      const importName = `__import_${islandName}`
 
       return `import { ${first} as ${importName} } from '${componentPath}';
-const ${islandName} = () => ${importName}${members}\n`;
+const ${islandName} = () => ${importName}${members}\n`
     }
 
-    return `const ${islandName} = () => import('${componentPath}').then(mod => mod.${imported});\n`;
+    return `const ${islandName} = () => import('${componentPath}').then(mod => mod.${imported});\n`
   })
-  .join('\n')}`;
+  .join("\n")}`
 
   code += `
 window.__SERVITE__islands = [
-  ${islands.map((_, index) => `island_${index}`).join(',\n  ')}
+  ${islands.map((_, index) => `island_${index}`).join(",\n  ")}
 ];
 
 // Notify hydrator
 window.dispatchEvent(new CustomEvent('servite:hydrate'));
-`;
+`
 
-  return code;
+  return code
 }

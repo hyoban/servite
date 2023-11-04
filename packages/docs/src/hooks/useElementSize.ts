@@ -1,21 +1,22 @@
-import { useState, DependencyList } from 'react';
-import { useResize } from './useResize';
+import { DependencyList, useState } from "react"
+
+import { useResize } from "./useResize"
 
 export function useElementSize(
   target: Element | null | (() => Element | null),
   options?: ResizeObserverOptions,
-  deps?: DependencyList
+  deps?: DependencyList,
 ) {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0)
+  const [height, setHeight] = useState(0)
 
   useResize(
     ([entry]) => {
-      setWidth(entry.contentRect.width);
-      setHeight(entry.contentRect.height);
+      setWidth(entry.contentRect.width)
+      setHeight(entry.contentRect.height)
     },
-    { target, options, deps }
-  );
+    { target, options, deps },
+  )
 
-  return { width, height };
+  return { width, height }
 }

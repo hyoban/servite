@@ -1,70 +1,71 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useAppState, useLocation } from 'servite/client';
-import { throttle, debounce } from 'lodash-es';
-import { useScroll } from '@/hooks/useScroll';
-import { Link } from '../Link';
+import { useScroll } from "@/hooks/useScroll"
+import { debounce, throttle } from "lodash-es"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useAppState, useLocation } from "servite/client"
+
+import { Link } from "../Link"
 
 interface TocItem {
-  id: string;
-  text: string;
-  depth: number;
+  id: string
+  text: string
+  depth: number
 }
 
 export function Toc() {
-  const toc: TocItem[] | undefined = useAppState().pageModule?.toc;
+  const toc: TocItem[] | undefined = useAppState().pageModule?.toc
 
-  const [headings, setHeadings] = useState<HTMLElement[]>([]);
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const elRef = useRef<HTMLDivElement>(null);
+  const [headings, setHeadings] = useState<HTMLElement[]>([])
+  const [activeIndex, setActiveIndex] = useState<number>(-1)
+  const elRef = useRef<HTMLDivElement>(null)
 
   // collect headings by toc
   useEffect(() => {
     const newHeadings = toc
       ?.map(({ id }) => document.getElementById(id))
-      .filter((x): x is HTMLElement => !!x);
+      .filter((x): x is HTMLElement => !!x)
 
-    setHeadings(newHeadings || []);
-    setActiveIndex(-1);
-  }, [toc]);
+    setHeadings(newHeadings || [])
+    setActiveIndex(-1)
+  }, [toc])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = useCallback(
     throttle(
       () => {
         if (!elRef.current || !headings.length) {
-          return;
+          return
         }
 
-        const scrollTop = getScrollTop();
+        const scrollTop = getScrollTop()
 
         if (scrollTop === 0) {
-          setActiveIndex(-1);
-          return;
+          setActiveIndex(-1)
+          return
         }
 
         const index = headings.findIndex((item, index) => {
-          const nextItem = headings[index + 1];
-          const { top } = item.getBoundingClientRect();
-          const { top: nextTop } = nextItem?.getBoundingClientRect() || {};
+          const nextItem = headings[index + 1]
+          const { top } = item.getBoundingClientRect()
+          const { top: nextTop } = nextItem?.getBoundingClientRect() || {}
 
-          return top <= 100 && (!nextItem || nextTop > 100);
-        });
+          return top <= 100 && (!nextItem || nextTop > 100)
+        })
 
-        setActiveIndex(index);
+        setActiveIndex(index)
       },
       50,
-      { trailing: true }
+      { trailing: true },
     ),
-    [headings]
-  );
+    [headings],
+  )
 
   // scroll -> active
-  useScroll(handleScroll);
+  useScroll(handleScroll)
 
   // activeIndex -> update url hash
   useEffect(() => {
-    debouncedUpdateUrlHash(headings[activeIndex]?.id);
-  }, [headings, activeIndex]);
+    debouncedUpdateUrlHash(headings[activeIndex]?.id)
+  }, [headings, activeIndex])
 
   // hash -> active heading scroll into view
   // useHeadingScrollIntoView(headings);
@@ -75,7 +76,7 @@ export function Toc() {
       <div className="relative">
         <div
           className={`absolute -left-3 w-1 h-5 rounded bg-c-brand transition-all
-          ${activeIndex >= 0 ? 'opacity-100' : 'opacity-0'}`}
+          ${activeIndex >= 0 ? "opacity-100" : "opacity-0"}`}
           style={{ top: `${Math.max(activeIndex * 28, 0) + 4}px` }}
         />
         {toc?.map((item, index) => (
@@ -85,8 +86,8 @@ export function Toc() {
             className={`block truncate text-sm leading-7 font-medium text-c-text-1 transition-opacity
               ${
                 index === activeIndex
-                  ? 'opacity-100'
-                  : 'opacity-60 hover:opacity-100'
+                  ? "opacity-100"
+                  : "opacity-60 hover:opacity-100"
               }`}
             to={`#${item.id}`}
             color={false}
@@ -97,41 +98,41 @@ export function Toc() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 const debouncedUpdateUrlHash = debounce((id?: string) => {
-  window.history.replaceState(undefined, '', id ? `#${id}` : ' ');
-}, 700);
+  window.history.replaceState(undefined, "", id ? `#${id}` : " ")
+}, 700)
 
 function getScrollTop() {
   return Math.max(
     window.pageYOffset,
     document.documentElement.scrollTop,
-    document.body.scrollTop
-  );
+    document.body.scrollTop,
+  )
 }
 
 function getTocItemId(index: number) {
-  return `toc-item-${index}`;
+  return `toc-item-${index}`
 }
 
-let canScrollIntoView = false;
+let canScrollIntoView = false
 
 function useHeadingScrollIntoView(headings: HTMLElement[]) {
-  const { hash } = useLocation();
+  const { hash } = useLocation()
 
   // hash -> active heading scroll into view
   useEffect(() => {
     if (hash && headings.length) {
       if (getScrollTop() === 0 || canScrollIntoView) {
         const heading = headings.find(
-          ({ id }) => id === decodeURIComponent(hash.replace(/^#/, ''))
-        );
-        heading?.scrollIntoView();
+          ({ id }) => id === decodeURIComponent(hash.replace(/^#/, "")),
+        )
+        heading?.scrollIntoView()
       }
 
-      canScrollIntoView = true;
+      canScrollIntoView = true
     }
-  }, [hash, headings]);
+  }, [hash, headings])
 }

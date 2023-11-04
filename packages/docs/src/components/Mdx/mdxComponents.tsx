@@ -1,8 +1,8 @@
-import { Link } from '../Link';
+import { Link } from "../Link"
 
 export function A(props: { href?: string }) {
-  const { href, ...restProps } = props;
-  return <Link {...restProps} to={href} />;
+  const { href, ...restProps } = props
+  return <Link {...restProps} to={href} />
 }
 
 export function Table(props: any) {
@@ -10,7 +10,7 @@ export function Table(props: any) {
     <div className="sv-table-wrapper">
       <table {...props} />
     </div>
-  );
+  )
 }
 
 // export function Pre({
