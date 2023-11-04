@@ -245,7 +245,7 @@ function findParentRoute(routes: Route[], currentRoute: Route): Route | null {
     }
 
     if (
-      depth(route) + 1 == depth(currentRoute) &&
+      route.children &&
       getRouteGroup(route.filePath) === getRouteGroup(currentRoute.filePath)
     ) {
       return route
