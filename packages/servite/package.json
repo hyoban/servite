@@ -42,7 +42,8 @@
     "prebuild": "tsx scripts/prebuild src/prebuild/*",
     "build": "pnpm run prebuild && rimraf dist && pnpm run copy && tsc",
     "copy": "tsx scripts/copy-client",
-    "release": "pnpm run build && changeset publish"
+    "prepublishOnly": "pnpm run build",
+    "release": "bumpp && pnpm publish --access public --no-git-checks"
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.3",

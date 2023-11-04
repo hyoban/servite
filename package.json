@@ -21,9 +21,7 @@
     "lint": "eslint --cache .",
     "lint:fix": "eslint --cache --fix .",
     "format": "prettier --cache --write .",
-    "format:check": "prettier --cache --check .",
-    "prepublishOnly": "pnpm run build",
-    "release": "bumpp -r && pnpm -r publish --access public"
+    "format:check": "prettier --cache --check ."
   },
   "prettier": "@planet-matrix/prettier-config",
   "packageManager": "pnpm@8.10.2",
