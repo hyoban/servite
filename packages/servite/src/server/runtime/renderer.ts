@@ -1,10 +1,10 @@
+import { EventHandler, getHeader, getQuery, H3Event } from "h3"
+import LZString from "lz-string"
 import {
   defineRenderHandler,
   useRuntimeConfig,
   useStorage,
-} from "#internal/nitro"
-import { EventHandler, getHeader, getQuery, H3Event } from "h3"
-import LZString from "lz-string"
+} from "nitropack/dist/runtime/index.js"
 import { RouteMatch } from "react-router-dom"
 import { parseURL } from "ufo"
 

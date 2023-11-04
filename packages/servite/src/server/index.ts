@@ -1,10 +1,10 @@
-import { defineCachedEventHandler } from "#internal/nitro"
 import { defineEventHandler, getQuery, isMethod, readBody } from "h3"
+import { defineCachedEventHandler } from "nitropack/dist/runtime/index.js"
 
 import type { H3Event } from "h3"
 import type { FetchOptions } from "ofetch"
 
-export * from "#internal/nitro"
+export * from "nitropack/dist/runtime/index.js"
 export * from "h3"
 
 export interface ApiHandler<Args extends Record<string, any>, Result = any> {

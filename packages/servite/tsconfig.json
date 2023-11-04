@@ -5,7 +5,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "#internal/nitro": ["./node_modules/nitropack/dist/runtime"],
+      // "#internal/nitro": ["./node_modules/nitropack/dist/runtime"],
       "virtual:servite/*": ["./src/server/virtual/*"],
       "virtual:servite-dist/*": ["./src/*"]
     }

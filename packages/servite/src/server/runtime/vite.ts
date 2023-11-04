@@ -1,4 +1,4 @@
-import { useRuntimeConfig } from "#internal/nitro"
+import { useRuntimeConfig } from "nitropack/dist/runtime/index.js"
 import { RouteMatch } from "react-router-dom"
 import path from "upath"
 import { createServer } from "vite"
