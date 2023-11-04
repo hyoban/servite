@@ -191,6 +191,8 @@ function resolveRoutePath(base: string, pageFile: string) {
     .replace(/\/404$/, "/*") // transform '/404' to '/*' so this route acts like a catch-all for URLs that we don't have explicit routes for
     .replace(/\/\[\.{3}.*?\]$/, "/*") // transform '/post/[...]' to '/post/*'
     .replace(/\/\[(.*?)\]/g, "/:$1") // transform '/user/[id]' to '/user/:id'
+    // remove Route Groups /(ignore)/a/b => /a/b
+    .replace(/\/\([^/]*?\)/g, "")
 
   return routePath || "/"
 }

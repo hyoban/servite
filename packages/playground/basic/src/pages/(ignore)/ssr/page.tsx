@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import getA, { Bar, Result } from "../../server/api/a"
+import getA, { Bar, Result } from "../../../server/api/a"
 import styles from "./page.module.css"
 
 export default function Page() {
