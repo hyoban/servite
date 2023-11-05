@@ -6,7 +6,7 @@ export function resolveServiteConfig(
   userServiteConfig: UserServiteConfig = {},
 ): ServiteConfig {
   const {
-    pagesDirs = [{ dir: "src/pages" }],
+    pagesDirs = [{ dir: "src/app" }],
     ssg = false,
     csr = false,
     ...rest
