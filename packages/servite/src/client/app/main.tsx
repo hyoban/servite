@@ -86,7 +86,9 @@ async function waitForPageReady({
     )
 
     const loaderContext = createLoaderContext(context?.ssrContext)
-    const shouldLoad = !initial || !ssrData?.appState?.loaderData
+    const shouldLoad =
+      (!initial || !ssrData?.appState?.loaderData) &&
+      !(!context?.ssrContext.noSSR && isBrowser)
 
     const results = await Promise.all(
       matches.map(async (match) => {

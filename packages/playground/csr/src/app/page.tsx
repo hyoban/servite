@@ -12,7 +12,8 @@ interface LoaderData {
   total: number
 }
 
-export const loader = () => {
+export const loader = (context) => {
+  console.log("loader", context.event.node)
   return {
     list: [0, 1, 2],
     total: 8,
