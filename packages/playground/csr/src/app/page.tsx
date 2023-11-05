@@ -1,18 +1,13 @@
 /**
  * @title 1234
  */
-import { useLoaderData } from "servite/client"
+import { LoaderFunctionArgs, useLoaderData } from "servite/client"
 
 import reactLogo from "../assets/react.svg"
 
 import "./page.css"
 
-interface LoaderData {
-  list: number[]
-  total: number
-}
-
-export const loader = (context) => {
+export const loader = (context: LoaderFunctionArgs) => {
   console.log("loader", context.event.node)
   return {
     list: [0, 1, 2],
@@ -21,7 +16,7 @@ export const loader = (context) => {
 }
 
 export default function Page() {
-  const loaderData = useLoaderData<LoaderData>()
+  const loaderData = useLoaderData<typeof loader>()
 
   return (
     <div className="App">

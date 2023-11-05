@@ -1,6 +1,6 @@
 import type { AppState, Page as PageData } from "../../shared/types.js"
 
-export type { PageData, AppState }
+export type { AppState, PageData }
 
 export class PageError extends Error {
   isNotFound?: boolean
@@ -18,7 +18,3 @@ export class PageError extends Error {
     this.isNotFound = options?.isNotFound
   }
 }
-
-export type LoaderFunction<
-  T extends Record<string, any> | undefined | null | void,
-> = () => T | Promise<T>
