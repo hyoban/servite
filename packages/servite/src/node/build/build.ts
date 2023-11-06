@@ -1,22 +1,17 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 import fs from "fs-extra"
-import { gzipSizeSync } from "gzip-size"
 import mm from "micromatch"
 import {
   copyPublicAssets,
   Nitro,
   build as nitroBuild,
-  prerender as nitroPrerender,
   prepare,
 } from "nitropack"
-import ora from "ora"
-import colors from "picocolors"
 import { RollupOutput } from "rollup"
 import path from "upath"
 import { InlineConfig, ResolvedConfig, build as viteBuild } from "vite"
 
 import { Page } from "../../shared/types.js"
-import { unwrapViteId } from "../../shared/utils.js"
 import { SSR_ENTRY_FILE } from "../constants.js"
 import { initNitro } from "../nitro/init.js"
 import { ServiteConfig } from "../types.js"
@@ -120,129 +115,6 @@ class Builder {
     })
   }
 
-  islandsBuild = async (nitro: Nitro, input: string) => {
-    process.env.SERVITE_ISLANDS_BUILD = "1"
-
-    return this.baseBuild({
-      logLevel: "warn",
-      build: {
-        emptyOutDir: false,
-        rollupOptions: {
-          input: {
-            islands: input,
-          },
-        },
-      },
-      plugins: [
-        {
-          name: "servite:build:islands",
-          config(config) {
-            return {
-              build: {
-                outDir: path.relative(
-                  config.root || "",
-                  nitro.options.output.publicDir,
-                ),
-              },
-            }
-          },
-          generateBundle(_options, bundle) {
-            // Delete unused asset
-            for (const name in bundle) {
-              if (
-                bundle[name].type === "asset" &&
-                bundle[name].fileName.length > 100
-              ) {
-                delete bundle[name]
-              }
-            }
-          },
-        },
-      ],
-    })
-  }
-
-  prerender = async (nitro: Nitro, clientEntryUrl: string) => {
-    const prerenderRoutes = nitro.options.prerender.routes
-
-    if (!prerenderRoutes.length) {
-      return
-    }
-
-    await nitroPrerender(nitro)
-
-    const spinner = ora("Building islands scripts")
-    const islandsFileNames: string[] = []
-    let viteConfig = {} as ResolvedConfig
-
-    await Promise.all(
-      nitro.options.prerender.routes.map(async (routePath) => {
-        const htmlPath = path.join(
-          nitro.options.output.publicDir,
-          routePath,
-          "index.html",
-        )
-
-        if (!fs.existsSync(htmlPath)) {
-          return
-        }
-
-        const htmlCode = await fs.readFile(htmlPath, "utf-8")
-
-        const [, islandsUrl] =
-          htmlCode.match(
-            /<script.*?src="(\/@id\/virtual:servite\/islands\/.*?)"/,
-          ) || []
-
-        if (!islandsUrl) {
-          return
-        }
-
-        if (!spinner.isSpinning) {
-          emptyLine()
-          spinner.start()
-        }
-
-        // Build islands
-        const { rollupOutput, viteConfig: _viteConfig } =
-          await this.islandsBuild(nitro, unwrapViteId(islandsUrl))
-
-        viteConfig = _viteConfig
-
-        const newIslandsUrl = getEntryUrl(rollupOutput, viteConfig)
-
-        islandsFileNames.push(rollupOutput.output[0].fileName)
-
-        // Modify prerender html file
-        await fs.outputFile(
-          htmlPath,
-          htmlCode
-            .replace(
-              new RegExp(`<script.*?src="${clientEntryUrl}".*?</script>`), // Remove client entry
-              "",
-            )
-            .replace(islandsUrl, newIslandsUrl),
-          "utf-8",
-        )
-      }),
-    )
-
-    if (spinner.isSpinning) {
-      const maxLength = Math.max(...islandsFileNames.map((name) => name.length))
-
-      spinner.succeed(`${islandsFileNames.length} islands scripts built.`)
-
-      islandsFileNames.forEach((name, index) => {
-        printAsset(
-          viteConfig,
-          maxLength,
-          name,
-          index === islandsFileNames.length - 1,
-        )
-      })
-    }
-  }
-
   build = async () => {
     // Client bundle
     const { rollupOutput, viteConfig, serviteConfig } = await this.clientBuild()
@@ -275,10 +147,6 @@ class Builder {
 
     if (serviteConfig.csr) {
       await copyCsrHtml(viteConfig, nitro)
-    } else {
-      // Prerender
-      await this.prerender(nitro, clientEntryUrl)
-      emptyLine()
     }
 
     // Build nitro output
@@ -334,29 +202,5 @@ async function copyServerAssets(viteConfig: ResolvedConfig) {
         ),
       ),
     ),
-  )
-}
-
-function printAsset(
-  viteConfig: ResolvedConfig,
-  maxLength: number,
-  fileName: string,
-  isLast: boolean,
-) {
-  const {
-    root,
-    build: { outDir, chunkSizeWarningLimit },
-  } = viteConfig
-  const prefixChar = isLast ? "└─" : "├─"
-  const filePath = path.resolve(root, outDir, fileName)
-  const content = fs.readFileSync(filePath)
-  const kb = content.length / 1024
-  const gzipKb = gzipSizeSync(content) / 1024
-  const sizeColor = kb > chunkSizeWarningLimit ? colors.yellow : colors.dim
-
-  process.stdout.write(
-    `  ${colors.gray(`${prefixChar} ${path.join(outDir, "/")}`)}${colors.cyan(
-      fileName.padEnd(maxLength + 3),
-    )}${sizeColor(`${kb.toFixed(2)} KiB | gzip: ${gzipKb.toFixed(2)} KiB`)}\n`,
   )
 }

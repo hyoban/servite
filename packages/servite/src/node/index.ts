@@ -5,7 +5,6 @@ import { PluginOption } from "vite"
 import { resolveServiteConfig } from "./config.js"
 import { CLIENT_DIR, DIST_DIR, PKG_DIR } from "./constants.js"
 import { serviteHtml } from "./html/plugin.js"
-import { serviteJsx } from "./jsx/plugin.js"
 import { serviteNitro } from "./nitro/plugin.js"
 import { servitePages } from "./pages/plugin.js"
 import { UserServiteConfig } from "./types.js"
@@ -15,7 +14,6 @@ const commonOptimizeDeps: string[] = [
   "servite > react-helmet-async > react-fast-compare",
   "servite > react-helmet-async > invariant",
   "servite > react-helmet-async > shallowequal",
-  "servite > nprogress",
 ]
 
 export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
@@ -43,9 +41,7 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
               "react/jsx-dev-runtime",
               "react-dom",
               "react-dom/client",
-              "servite > react-router-dom",
               "servite > react-helmet-async",
-              "servite > ofetch",
               ...commonOptimizeDeps,
             ],
             exclude: [
@@ -71,7 +67,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
                 /shallowequal/,
                 /invariant/,
                 /object-assign/,
-                /nprogress/,
               ],
             },
           },
@@ -96,7 +91,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
       } as any,
     },
     serviteHtml({ serviteConfig }),
-    ...serviteJsx({ serviteConfig }),
     servitePages({ serviteConfig }),
     ...serviteNitro({ serviteConfig }),
   ]

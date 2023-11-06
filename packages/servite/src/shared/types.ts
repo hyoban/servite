@@ -26,13 +26,6 @@ export interface SSRContext {
   noSSR: boolean
 }
 
-export interface Island {
-  type: IslandType
-  component: string
-}
-
-export type IslandType = "load" | "idle" | "visible" | "media"
-
 export interface AppState {
   routes: Route[]
   pages: Page[]
@@ -48,7 +41,6 @@ export interface SSREntryRenderContext {
   ssrContext: SSRContext
   helmetContext: Partial<FilledContext>
   routeMatches?: RouteMatch[]
-  islands?: Island[]
   appState?: Pick<
     AppState,
     "pagePath" | "pageData" | "pageModule" | "loaderData"
@@ -73,7 +65,6 @@ export interface SSREntry {
 export interface SSRData {
   context: Omit<SSRContext, "event">
   serverRendered: boolean
-  hasIslands: boolean
   appState?: SSREntryRenderContext["appState"]
 }
 

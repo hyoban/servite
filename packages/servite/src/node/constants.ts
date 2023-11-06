@@ -36,8 +36,3 @@ export const PAGES_IGNORE_PATTERN = [
 ]
 
 export const MARKDOWN_EXTS = [".md", ".mdx"]
-
-export const ISLAND_SPLITTER = "__ISLAND__"
-
-// eg. virtual:servite/islands/JYWwDg9gTgLgBAbzgEwKYDMCGBXANvTAZzgEE4BfOdKCEOAcgDoB6E+gbgCgBjCAO0LxghXJj7IA+gAY4AXjgAKAJRyAfKS6dQkWIjgAhClRp0mzfRx79BcYaPESAjHMUrZ6-YwDCm3gKEiYpIATC7Karbg0DAKZgAi9EqMMAAWqHwKIBDIEVnIjGhYeDBKmgDuwOIQZYwSEgCSAMoAMiQAcnGNdS4A2pxwtoEOUgA0-YP2ko5jA3ZBEsGcALrsQA
-export const ISLANDS_MODULE_ID_PREFIX = "virtual:servite/islands/"

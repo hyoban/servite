@@ -29,7 +29,6 @@ declare const __HASH_ROUTER__: boolean
 
 interface Window {
   __SERVITE__ssrData?: import("../shared/types").SSRData
-  __SERVITE__islands?: (() => any)[]
   __SERVITE__createElement: any
   __SERVITE__createRoot: any
   __SERVITE__hydrateRoot: any

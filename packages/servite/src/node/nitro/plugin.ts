@@ -1,6 +1,5 @@
 import { isMainThread } from "worker_threads"
 
-import fs from "fs-extra"
 import { H3Event } from "h3"
 import { build, createDevServer, Nitro, prepare } from "nitropack"
 import path from "upath"
@@ -73,83 +72,6 @@ export function serviteNitro({
       },
       async closeBundle() {
         await nitro?.close()
-      },
-    },
-    {
-      name: "servite:nitro-integrate-api-call",
-      enforce: "pre",
-      resolveId(source, importer, opts) {
-        if (opts?.custom?.depScan) {
-          const id = path.resolve(importer || "", source)
-
-          // Skip optimize server file
-          if (id.startsWith(nitro.options.srcDir)) {
-            return {
-              id,
-              external: true,
-            }
-          }
-        }
-      },
-      async load(id) {
-        if (
-          id.startsWith(nitro.options.srcDir) &&
-          !id.endsWith("server-render.tsx")
-        ) {
-          const serverRoute = id.substring(nitro.options.srcDir.length)
-          const relPath = path.relative(viteConfig.root, id)
-
-          if (
-            !/^\/(api|routes)\//.test(serverRoute) ||
-            !/\.(js|cjs|mjs|ts)$/.test(id)
-          ) {
-            throw new Error(
-              `[servite] This module is not an api endpoint: ${relPath}`,
-            )
-          }
-
-          if (/\[.*?\]/.test(id)) {
-            throw new Error(
-              `[servite] Currently api endpoint does not support dynamic route: ${relPath}`,
-            )
-          }
-
-          const originalCode = await fs.readFile(id, "utf-8")
-
-          if (!hasApiHandlerCode(originalCode)) {
-            throw new Error(
-              `[servite] Please use "defineApiHandler" or "apiHandler" to define the api endpoint: ${relPath}`,
-            )
-          }
-
-          const handler = getHandler(serverRoute)
-          const { generateCode, fetchImportSource } = serviteConfig.api || {}
-
-          if (generateCode) {
-            return generateCode(handler, originalCode)
-          }
-
-          const apiName = getApiName(handler)
-          const url = path.join(nitro.options.baseURL, handler.route)
-          const method = (handler.method || "get").toLowerCase()
-
-          return `${
-            fetchImportSource
-              ? `import _fetch from '${fetchImportSource}';`
-              : `import { ofetch as _fetch } from 'servite/client';`
-          }
-
-${getExportEnumCode(originalCode)}
-
-export default function ${apiName}(args, options) {
-  return _fetch('${url}', {
-    method: '${method}',
-    ${method === "get" ? "query: args" : "body: args"},
-    ...options,
-  });
-}
-`
-        }
       },
     },
   ]

@@ -16,7 +16,7 @@ export function serviteHtml({
     name: "servite:html",
     enforce: "post",
     async config(config) {
-      if (process.env.SERVITE_SSR_BUILD || process.env.SERVITE_ISLANDS_BUILD) {
+      if (process.env.SERVITE_SSR_BUILD) {
         return
       }
 

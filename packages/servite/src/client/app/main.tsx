@@ -20,7 +20,6 @@ import {
 import { ErrorPage } from "./components/ErrorPage.js"
 import { isBrowser, ssrData } from "./constants.js"
 import { appContext } from "./context.js"
-import { useNProgress } from "./hooks/useNProgress.js"
 import { AppState, PageError } from "./types.js"
 
 function createLoaderContext(ssrContext?: SSRContext): LoaderContext {
@@ -211,8 +210,6 @@ export async function createApp({
         clearTimeout(timer)
       })()
     }, [pathname])
-
-    useNProgress(appState.pageLoading)
 
     useEffect(() => {
       if (import.meta.env.DEV) {

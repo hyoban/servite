@@ -4,14 +4,11 @@ import {
   useStorage,
 } from "#internal/nitro"
 import { EventHandler, getHeader, getQuery, H3Event } from "h3"
-import LZString from "lz-string"
 import { RouteMatch } from "react-router-dom"
 import { parseURL } from "ufo"
 
-import islandsHydrateCode from "../../prebuild/islands-hydrate.prebuilt.js"
 import ssrStylesCleanerCode from "../../prebuild/ssr-styles-cleaner.prebuilt.js"
 import {
-  Island,
   Route,
   SSRContext,
   SSRData,
@@ -20,12 +17,7 @@ import {
   SSREntryRenderResult,
 } from "../../shared/types.js"
 import { wrapViteId } from "../../shared/utils.js"
-import {
-  renderIslandsCode,
-  renderPreloadLink,
-  renderTag,
-  trapConsole,
-} from "./utils.js"
+import { renderPreloadLink, renderTag, trapConsole } from "./utils.js"
 import { collectRoutesStyles, getViteDevServer } from "./vite.js"
 
 const isDev = process.env.NODE_ENV === "development"
@@ -171,12 +163,11 @@ let _ssrManifestJson: Record<string, string[]> | undefined
 async function renderAssets(
   ssrContext: SSRContext,
   routeMatches: RouteMatch[],
-  hasIslands: boolean,
 ): Promise<string> {
   if (isDev) {
     const devAssets =
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      hasIslands || useRuntimeConfig()?.serviteConfig?.csr
+      useRuntimeConfig()?.serviteConfig?.csr
         ? []
         : [
             // inject csr client entry
@@ -259,33 +250,11 @@ async function renderAssets(
     .flatMap((m) => {
       const route = m.route as Route
       return (_ssrManifestJson?.[route.filePath] || []).map((link) =>
-        hasIslands && link.endsWith(".js") ? "" : renderPreloadLink(link),
+        link.endsWith(".js") ? "" : renderPreloadLink(link),
       )
     })
     .filter(Boolean)
     .join("\n    ")
-}
-
-function renderIslandsScript(islands?: Island[]) {
-  if (!islands?.length) {
-    return ""
-  }
-
-  const islandsCode = renderIslandsCode(islands)
-  const compressed = LZString.compressToEncodedURIComponent(islandsCode)
-
-  return `${renderTag({
-    tag: "script",
-    children: islandsHydrateCode,
-  })}
-${renderTag({
-  tag: "script",
-  attrs: {
-    type: "module",
-    crossorigin: "",
-    src: wrapViteId(`virtual:servite/islands/${compressed}`),
-  },
-})}`
 }
 
 async function renderFullHtml(
@@ -318,12 +287,8 @@ async function renderFullHtml(
     template = template.replace("<body", `<body ${bodyAttrs}`)
   }
 
-  // Islands
-  const islandsScript = renderIslandsScript(renderContext?.islands)
-  const hasIslands = Boolean(renderContext?.islands?.length)
-
   // Assets
-  const assets = await renderAssets(ssrContext, routeMatches, hasIslands)
+  const assets = await renderAssets(ssrContext, routeMatches)
 
   const headTags = [
     title,
@@ -333,7 +298,6 @@ async function renderFullHtml(
     script,
     style,
     assets,
-    islandsScript,
     renderResult.headTags,
   ]
     .map((x) => x?.toString())
@@ -351,7 +315,6 @@ async function renderFullHtml(
       noSSR: ssrContext.noSSR,
     },
     serverRendered: Boolean(renderResult.appHtml),
-    hasIslands,
     appState: renderContext?.appState,
   }
 

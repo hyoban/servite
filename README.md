@@ -1,6 +1,6 @@
 # servite
 
-A vite plugin for React SSR / SSG / CSR / Islands. Powered by [nitro](https://github.com/unjs/nitro).
+A vite plugin for React SSR / SSG / CSR. Powered by [nitro](https://github.com/unjs/nitro).
 
 To check out docs, visit https://codpoe.github.io/servite/ or https://servite.vercel.app.
 
@@ -9,41 +9,4 @@ To check out docs, visit https://codpoe.github.io/servite/ or https://servite.ve
 - 🌟 SSR by default
 - ⚡️ SSG easily
 - 🖥 CSR easily
-- 🏝 Support islands architecture
 - 🔥 Powered by [nitro](https://github.com/unjs/nitro)
-
----
-
-## TODO
-
-- [x] optional ssr / ssg
-  - header: no ssr
-- [x] loader params ctx
-- [x] useLoaderData
-- [x] theme
-- [x] copy shared types
-- [x] routes deps optimize
-- [x] parse docblock for js/ts
-- [x] remove theme
-- [x] remove shared: union dirs
-- [x] custom server render
-- [x] jsx dir
-- [x] build: prerender
-  - [x] ssg config
-  - [x] build islands, island-hydrate
-  - [x] modify prerender html file
-- [x] conflict with complete client hydration
-- [x] \_\_islandClient
-- [x] collect all matched routes css
-- [x] upgrade vite@3.2
-- [x] dev hmr
-- [x] dev spa: inject entry.client.tsx
-- [x] prebuild src/node/pages/enhance.ts
-- [x] prebuild ssr-styles-cleaner
-- [x] default 404 page
-- [x] support custom html template
-- [x] islands hot reload
-- [x] upgrade to vite@4
-- [x] create-servite
-- [x] Use changeset
-- [x] Optimize the performance of page rendering
