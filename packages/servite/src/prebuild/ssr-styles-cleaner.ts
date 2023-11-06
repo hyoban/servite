@@ -33,7 +33,9 @@ const observer = new MutationObserver((records) => {
     record.addedNodes.forEach((node) => {
       const viteDevId = getStyleViteDevId(node)
       if (viteDevId) {
-        ssrInjectedStyles.get(viteDevId)?.remove()
+        setTimeout(() => {
+          ssrInjectedStyles.get(viteDevId)?.remove()
+        }, 500)
       }
     })
   })
