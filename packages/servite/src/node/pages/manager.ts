@@ -74,7 +74,7 @@ ${space}"element": React.createElement(${localName}.component, null, React.creat
     )
 
     routesCode = `import React from 'react';
-  import { Outlet } from 'servite/client';
+  import { Outlet } from 'react-router-dom';
   ${generateEnhanceCode(this.viteConfig!)}
   ${importsCode}
   export const routes = ${routesCode};
