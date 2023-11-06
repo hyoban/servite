@@ -7,7 +7,7 @@ export interface PagesDir {
 export interface UserServiteConfig {
   /**
    * Directory for finding pages
-   * @default [{ dir: 'src/pages' }]
+   * @default [{ dir: 'src/app' }]
    */
   pagesDirs?: PagesDir[]
   /**
@@ -22,13 +22,26 @@ export interface UserServiteConfig {
    * @default false
    */
   csr?: boolean
+  baseHTML?: {
+    /**
+     * @default 'Servite App'
+     */
+    title?: string
+    /**
+     * @default 'Servite App'
+     */
+    description?: string
+    /**
+     * @default 'use-dark'
+     */
+    themeKey?: string
+  }
 }
 
 type PartialRequired<T, K extends keyof T> = T & {
   [P in K]-?: T[P]
 }
 
-export interface ServiteConfig
-  extends PartialRequired<UserServiteConfig, "pagesDirs" | "ssg" | "csr"> {
+export interface ServiteConfig extends UserServiteConfig {
   serverRenderFile?: string
 }

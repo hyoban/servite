@@ -89,7 +89,7 @@ ${space}"element": React.createElement(${localName}.component, null, React.creat
   }
 
   checkPageFile = async (absFilePath: string) => {
-    const isPageFile = this.serviteConfig.pagesDirs.some(
+    const isPageFile = this.serviteConfig.pagesDirs?.some(
       ({ dir, ignore = [] }) => {
         const prefixPath = path.join(
           path.resolve(this.viteConfig.root, dir),
@@ -161,7 +161,7 @@ async function scanPages(
     )
   }
 
-  return (await Promise.all(serviteConfig.pagesDirs.map(scan)))
+  return (await Promise.all(serviteConfig.pagesDirs?.map(scan) ?? []))
     .flat()
     .sort((a, b) => {
       const compareRes = a.routePath.localeCompare(b.routePath)

@@ -52,7 +52,7 @@ export function servitePages({
     config(config) {
       const root = path.resolve(config.root || "")
 
-      const optimizeEntries = serviteConfig.pagesDirs.flatMap(
+      const optimizeEntries = serviteConfig.pagesDirs?.flatMap(
         ({ dir, ignore = [] }) => {
           const dirFromRoot = path.relative(root, path.resolve(root, dir))
 

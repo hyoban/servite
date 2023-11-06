@@ -46,6 +46,44 @@ export function serviteHtml({
       handler(html) {
         const htmlTags: HtmlTagDescriptor[] = []
 
+        // inject title and description
+        if (serviteConfig?.baseHTML?.title) {
+          htmlTags.push({
+            tag: "title",
+            injectTo: "head",
+            children: serviteConfig.baseHTML.title,
+          })
+        }
+
+        if (serviteConfig?.baseHTML?.description) {
+          htmlTags.push({
+            tag: "meta",
+            injectTo: "head",
+            attrs: {
+              name: "description",
+              content: serviteConfig.baseHTML.description,
+            },
+          })
+        }
+
+        // inject theme inline script
+        if (serviteConfig?.baseHTML?.themeKey) {
+          htmlTags.push({
+            tag: "script",
+            injectTo: "head",
+            children: `
+              !(function () {
+                var e =
+                    window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches,
+                  t = localStorage.getItem("${serviteConfig.baseHTML.themeKey}") || "system"
+                ;('"dark"' === t || (e && '"light"' !== t)) &&
+                  document.documentElement.classList.toggle("dark", !0)
+              })()
+            `,
+          })
+        }
+
         // inject div#root
         if (!/<div.*?id=('|")root(\1)/.test(html)) {
           htmlTags.push({
