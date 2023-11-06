@@ -4,11 +4,6 @@ export interface PagesDir {
   ignore?: string[]
 }
 
-export interface ApiHandler {
-  method: string
-  route: string
-}
-
 export interface UserServiteConfig {
   /**
    * Directory for finding pages

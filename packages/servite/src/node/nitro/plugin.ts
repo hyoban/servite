@@ -2,10 +2,9 @@ import { isMainThread } from "worker_threads"
 
 import { H3Event } from "h3"
 import { build, createDevServer, Nitro, prepare } from "nitropack"
-import path from "upath"
 import { Plugin, ResolvedConfig } from "vite"
 
-import { ApiHandler, ServiteConfig } from "../types.js"
+import { ServiteConfig } from "../types.js"
 import { initNitro } from "./init.js"
 
 export interface ServiteNitroPluginConfig {
@@ -75,51 +74,4 @@ export function serviteNitro({
       },
     },
   ]
-}
-
-function hasApiHandlerCode(code: string) {
-  return (
-    code.includes("defineApiHandler") ||
-    code.includes("apiHandler") ||
-    code.includes("defineCachedApiHandler") ||
-    code.includes("cachedApiHandler")
-  )
-}
-
-const httpMethodRegex =
-  /\.(connect|delete|get|head|options|patch|post|put|trace)/
-
-function getHandler(id: string): ApiHandler {
-  let method = "get"
-  let route = path.trimExt(id.replace(/^\/routes/, ""))
-
-  const methodMatch = route.match(httpMethodRegex)
-
-  if (methodMatch) {
-    route = route.slice(0, Math.max(0, methodMatch.index!))
-    method = methodMatch[1]
-  }
-
-  route = route.replace(/\/index$/, "") || "/"
-
-  return {
-    method,
-    route,
-  }
-}
-
-// / -> <method>Index
-// /foo/bar -> <method>FooBar
-function getApiName({ method = "get", route = "/" }: ApiHandler) {
-  let name = method.toLowerCase()
-
-  name += (route.match(/[A-Za-z0-9]+/g) || ["index"])
-    .map((x) => x[0].toUpperCase() + x.substring(1))
-    .join("")
-
-  return name
-}
-
-function getExportEnumCode(code: string) {
-  return code.match(/^export\s+enum.*?\{[\s\S]*?\}/m)?.[0] || ""
 }

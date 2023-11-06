@@ -71,7 +71,7 @@ export async function collectRoutesStyles(routeMatches: RouteMatch[]) {
 
     // call `ssrLoadModule` here to ensure moduleGraph is complete
     await viteDevServer.ssrLoadModule(pageFile)
-    const pageModule = await viteDevServer.moduleGraph.getModuleById(pageFile)
+    const pageModule = viteDevServer.moduleGraph.getModuleById(pageFile)
 
     if (pageModule) {
       collect(pageModule)
