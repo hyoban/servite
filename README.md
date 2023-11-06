@@ -8,7 +8,7 @@
 ## 安装
 
 ```bash
-ni servite defu h3 nitropack servite
+ni servit@npm:@hyoban/servite defu h3 nitropack servite
 ```
 
 ```ts
