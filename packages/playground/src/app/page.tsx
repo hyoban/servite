@@ -1,6 +1,15 @@
-import { Helmet } from "servite/client"
+import { Helmet, useLoaderData } from "servite/client"
+
+import type { LoaderFunctionArgs } from "servite/client"
+
+export function loader(context: LoaderFunctionArgs) {
+  return {
+    hello: context.pathname,
+  }
+}
 
 export default function Page() {
+  const data = useLoaderData<typeof loader>()
   return (
     <div>
       <Helmet>
@@ -8,7 +17,8 @@ export default function Page() {
         <title>My Title</title>
         <link rel="canonical" href="http://mysite.com/example" />
       </Helmet>
-      hello
+      <h1>Page</h1>
+      <p>{data.hello}</p>
     </div>
   )
 }
