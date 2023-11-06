@@ -1,11 +1,11 @@
 import { useRuntimeConfig } from "#internal/nitro"
-import { RouteMatch } from "react-router-dom"
 import path from "upath"
 import { createServer } from "vite"
 
-import { Route } from "../../shared/types.js"
 import { lazyCachedFn } from "./utils.js"
 
+import type { Route } from "../../shared/types.js"
+import type { RouteMatch } from "react-router-dom"
 import type { ModuleNode } from "vite"
 
 const crawlFileUrlRE = /\.(js|jsx|ts|tsx|md|mdx)($|\?)/
@@ -13,7 +13,7 @@ const styleUrlRE = /\.(css|less|sass|scss|styl|stylus|pcss|postcss)($|\?)/
 
 export const getViteDevServer = lazyCachedFn(async () => {
   const viteDevServer = await createServer({
-    ...useRuntimeConfig()?.viteDevServerConfig,
+    ...useRuntimeConfig()?.["viteDevServerConfig"],
     appType: "custom",
     server: {
       middlewareMode: true,
@@ -49,7 +49,7 @@ export async function collectRoutesStyles(routeMatches: RouteMatch[]) {
     seen.add(mod.url)
 
     if (styleUrlRE.test(mod.url)) {
-      const defaultExport = mod.ssrModule?.default
+      const defaultExport = mod.ssrModule?.["default"]
 
       styles.push({
         id: mod.id || undefined,

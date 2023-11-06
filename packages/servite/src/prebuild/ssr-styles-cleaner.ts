@@ -1,5 +1,5 @@
 function getStyleSsrDevId(el: HTMLElement): string | undefined {
-  return el.dataset.ssrDevId
+  return el.dataset["ssrDevId"]
 }
 
 function getStyleViteDevId(node: Node): string | undefined {
@@ -7,7 +7,7 @@ function getStyleViteDevId(node: Node): string | undefined {
     node.nodeType === node.ELEMENT_NODE &&
     (node as Element).tagName.toLowerCase() === "style"
   ) {
-    return (node as HTMLStyleElement).dataset.viteDevId
+    return (node as HTMLStyleElement).dataset["viteDevId"]
   }
   return undefined
 }

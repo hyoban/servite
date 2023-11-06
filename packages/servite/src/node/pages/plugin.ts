@@ -1,14 +1,6 @@
 import fs from "fs-extra"
 import path from "upath"
-import {
-  HmrContext,
-  ModuleNode,
-  Plugin,
-  ResolvedConfig,
-  ViteDevServer,
-} from "vite"
 
-import { Page } from "../../shared/types.js"
 import {
   CUSTOM_SERVER_RENDER_MODULE_ID,
   PAGES_IGNORE_PATTERN,
@@ -20,9 +12,18 @@ import {
   RESOLVED_PAGES_ROUTES_MODULE_ID,
   SCRIPT_EXTS,
 } from "../constants.js"
-import { ServiteConfig } from "../types.js"
 import { shallowCompare } from "../utils.js"
 import { PagesManager, parsePageMeta } from "./manager.js"
+
+import type { Page } from "../../shared/types.js"
+import type { ServiteConfig } from "../types.js"
+import type {
+  HmrContext,
+  ModuleNode,
+  Plugin,
+  ResolvedConfig,
+  ViteDevServer,
+} from "vite"
 
 export interface ServitePagesPluginConfig {
   serviteConfig: ServiteConfig
@@ -115,6 +116,7 @@ export function servitePages({
       if (source === CUSTOM_SERVER_RENDER_MODULE_ID) {
         return RESOLVED_CUSTOM_SERVER_RENDER_MODULE_ID
       }
+      return
     },
     async load(id) {
       if (id === RESOLVED_PAGES_MODULE_ID) {
@@ -133,6 +135,7 @@ export function servitePages({
         }
         return `export default undefined;`
       }
+      return
     },
     async transform(code, id) {
       // export will affect @vitejs/plugin-react's judgment of react refresh boundary,
@@ -142,6 +145,7 @@ export function servitePages({
       if (isPageFile) {
         return addHmrAccept(code, "loader")
       }
+      return
     },
     async handleHotUpdate(ctx) {
       if (!pagesManager) {
@@ -162,6 +166,7 @@ export function servitePages({
 
         return modules
       }
+      return
     },
     api: {
       getPages: () => pagesManager.getPages(),
@@ -208,4 +213,5 @@ function findServerRender(root: string) {
       return serverRenderFile
     }
   }
+  return
 }

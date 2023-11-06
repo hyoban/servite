@@ -22,7 +22,7 @@ async function bootstrap() {
     </BrowserRouter>
   )
 
-  if (container.dataset.serverRendered === "true") {
+  if (container.dataset["serverRendered"] === "true") {
     // ssr hydrate
     hydrateRoot(container, element)
     return

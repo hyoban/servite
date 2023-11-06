@@ -1,3 +1,5 @@
+import "./index.css"
+
 import { Helmet, useLoaderData } from "servite/client"
 
 import type { LoaderFunctionArgs } from "servite/client"

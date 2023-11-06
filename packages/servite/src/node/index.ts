@@ -1,13 +1,14 @@
 import fg from "fast-glob"
 import path from "upath"
-import { PluginOption } from "vite"
 
 import { resolveServiteConfig } from "./config.js"
 import { CLIENT_DIR, DIST_DIR, PKG_DIR } from "./constants.js"
 import { serviteHtml } from "./html/plugin.js"
 import { serviteNitro } from "./nitro/plugin.js"
 import { servitePages } from "./pages/plugin.js"
-import { UserServiteConfig } from "./types.js"
+
+import type { UserServiteConfig } from "./types.js"
+import type { PluginOption } from "vite"
 
 const commonOptimizeDeps: string[] = [
   "servite > react-helmet-async > prop-types",

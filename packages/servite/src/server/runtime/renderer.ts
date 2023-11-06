@@ -3,12 +3,15 @@ import {
   useRuntimeConfig,
   useStorage,
 } from "#internal/nitro"
-import { EventHandler, getHeader, getQuery, H3Event } from "h3"
-import { RouteMatch } from "react-router-dom"
+import { getHeader, getQuery } from "h3"
 import { parseURL } from "ufo"
 
 import ssrStylesCleanerCode from "../../prebuild/ssr-styles-cleaner.prebuilt.js"
-import {
+import { wrapViteId } from "../../shared/utils.js"
+import { renderPreloadLink, renderTag, trapConsole } from "./utils.js"
+import { collectRoutesStyles, getViteDevServer } from "./vite.js"
+
+import type {
   Route,
   SSRContext,
   SSRData,
@@ -16,11 +19,11 @@ import {
   SSREntryRenderContext,
   SSREntryRenderResult,
 } from "../../shared/types.js"
-import { wrapViteId } from "../../shared/utils.js"
-import { renderPreloadLink, renderTag, trapConsole } from "./utils.js"
-import { collectRoutesStyles, getViteDevServer } from "./vite.js"
+import type { H3Event } from "h3"
+import type { EventHandler } from "h3"
+import type { RouteMatch } from "react-router-dom"
 
-const isDev = process.env.NODE_ENV === "development"
+const isDev = process.env["NODE_ENV"] === "development"
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const storage = useStorage()
@@ -61,10 +64,10 @@ export default <EventHandler>defineRenderHandler(async (event) => {
 function isNoSSR(event: H3Event): boolean {
   const noSSR = Boolean(
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useRuntimeConfig()?.serviteConfig?.csr ||
+    useRuntimeConfig()?.["serviteConfig"]?.csr ||
       getQuery(event)["servite-no-ssr"] ||
       getHeader(event, "x-servite-no-ssr") ||
-      process.env.SERVITE_NO_SSR,
+      process.env["SERVITE_NO_SSR"],
   )
 
   if (noSSR) {
@@ -167,7 +170,8 @@ async function renderAssets(
   if (isDev) {
     const devAssets =
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useRuntimeConfig()?.serviteConfig?.csr
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useRuntimeConfig()?.["serviteConfig"]?.csr
         ? []
         : [
             // inject csr client entry

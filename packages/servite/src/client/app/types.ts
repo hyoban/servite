@@ -4,7 +4,7 @@ export type { AppState, PageData }
 
 export class PageError extends Error {
   isNotFound?: boolean
-  cause?: Error
+  override cause?: Error
 
   constructor(
     message?: string,

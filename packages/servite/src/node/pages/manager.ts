@@ -202,9 +202,9 @@ export async function parsePageMeta(filePath: string, fileContent: string) {
   if (isMarkdown(filePath)) {
     const { data: frontMatter, content } = matter(fileContent)
 
-    if (!frontMatter.title) {
+    if (!frontMatter["title"]) {
       const m = content.match(/^#\s+(.*)$/m)
-      frontMatter.title = m?.[1]
+      frontMatter["title"] = m?.[1]
     }
 
     return frontMatter

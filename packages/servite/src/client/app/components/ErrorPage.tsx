@@ -1,4 +1,4 @@
-import { PageError } from "../types"
+import { PageError } from "../types.js"
 
 export interface ErrorPageProps {
   error: PageError

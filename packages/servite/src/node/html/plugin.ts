@@ -1,9 +1,10 @@
 import fs from "fs-extra"
 import path from "upath"
-import { HtmlTagDescriptor, Plugin } from "vite"
 
 import { APP_HTML_FILE, FS_PREFIX_CLIENT_ENTRY } from "../constants.js"
-import { ServiteConfig } from "../types.js"
+
+import type { ServiteConfig } from "../types.js"
+import type { HtmlTagDescriptor, Plugin } from "vite"
 
 export interface ServiteHtmlPluginConfig {
   serviteConfig: ServiteConfig
@@ -16,7 +17,7 @@ export function serviteHtml({
     name: "servite:html",
     enforce: "post",
     async config(config) {
-      if (process.env.SERVITE_SSR_BUILD) {
+      if (process.env["SERVITE_SSR_BUILD"]) {
         return
       }
 
@@ -96,7 +97,7 @@ export function serviteHtml({
         }
 
         // inject client entry
-        if (serviteConfig?.csr || process.env.SERVITE_CLIENT_BUILD) {
+        if (serviteConfig?.csr || process.env["SERVITE_CLIENT_BUILD"]) {
           htmlTags.push({
             tag: "script",
             attrs: {
@@ -110,7 +111,7 @@ export function serviteHtml({
         return htmlTags
       },
     },
-    ...((serviteConfig?.csr || process.env.SERVITE_CLIENT_BUILD) && {
+    ...((serviteConfig?.csr || process.env["SERVITE_CLIENT_BUILD"]) && {
       async generateBundle(_options, bundle) {
         Object.values(bundle).forEach((chunk) => {
           if (

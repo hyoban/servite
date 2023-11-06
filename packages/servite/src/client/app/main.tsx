@@ -10,17 +10,19 @@ import { $URL } from "ufo"
 import { pages } from "virtual:servite/pages"
 import { routes } from "virtual:servite/pages-routes"
 
-import {
+import { ErrorPage } from "./components/ErrorPage.js"
+import { isBrowser, ssrData } from "./constants.js"
+import { appContext } from "./context.js"
+import { PageError } from "./types.js"
+
+import type {
   LoaderBaseContext,
   LoaderContext,
   Route,
   SSRContext,
   SSREntryRenderContext,
 } from "../../shared/types.js"
-import { ErrorPage } from "./components/ErrorPage.js"
-import { isBrowser, ssrData } from "./constants.js"
-import { appContext } from "./context.js"
-import { AppState, PageError } from "./types.js"
+import type { AppState } from "./types.js"
 
 function createLoaderContext(ssrContext?: SSRContext): LoaderContext {
   const url = isBrowser ? window.location.href : ssrContext!.url
@@ -227,7 +229,7 @@ export async function createApp({
           {appState.pagePath ? (
             <Suspense>{routesElement}</Suspense>
           ) : appState.pageError ? (
-            <ErrorPage error={appState.pageError} />
+            <ErrorPage error={appState.pageError as PageError} />
           ) : null}
         </appContext.Provider>
       </HelmetProvider>

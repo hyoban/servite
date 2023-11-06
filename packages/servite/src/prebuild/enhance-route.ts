@@ -20,7 +20,9 @@ interface EnhanceResult {
  * This function will be injected into routes code
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function enhance(factoryOrModules: PageFactory | PageModule): EnhanceResult {
+export function enhance(
+  factoryOrModules: PageFactory | PageModule,
+): EnhanceResult {
   const relativeBase = base === "" || base.startsWith(".")
 
   function enhanceFactory(factory: PageFactory): EnhanceResult {

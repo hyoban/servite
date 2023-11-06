@@ -1,20 +1,18 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 import fs from "fs-extra"
 import mm from "micromatch"
-import {
-  copyPublicAssets,
-  Nitro,
-  build as nitroBuild,
-  prepare,
-} from "nitropack"
-import { RollupOutput } from "rollup"
+import { copyPublicAssets, build as nitroBuild, prepare } from "nitropack"
 import path from "upath"
-import { InlineConfig, ResolvedConfig, build as viteBuild } from "vite"
+import { build as viteBuild } from "vite"
 
-import { Page } from "../../shared/types.js"
 import { SSR_ENTRY_FILE } from "../constants.js"
 import { initNitro } from "../nitro/init.js"
-import { ServiteConfig } from "../types.js"
+
+import type { Page } from "../../shared/types.js"
+import type { ServiteConfig } from "../types.js"
+import type { Nitro } from "nitropack"
+import type { RollupOutput } from "rollup"
+import type { InlineConfig, ResolvedConfig } from "vite"
 
 export async function build(inlineConfig: InlineConfig) {
   return new Builder(inlineConfig).build()
@@ -95,7 +93,7 @@ class Builder {
   }
 
   clientBuild = async () => {
-    process.env.SERVITE_CLIENT_BUILD = "1"
+    process.env["SERVITE_CLIENT_BUILD"] = "1"
 
     return this.baseBuild({
       build: {
@@ -105,7 +103,7 @@ class Builder {
   }
 
   ssrBuild = async () => {
-    process.env.SERVITE_SSR_BUILD = "1"
+    process.env["SERVITE_SSR_BUILD"] = "1"
 
     return this.baseBuild({
       build: {
@@ -117,8 +115,7 @@ class Builder {
 
   build = async () => {
     // Client bundle
-    const { rollupOutput, viteConfig, serviteConfig } = await this.clientBuild()
-    const clientEntryUrl = getEntryUrl(rollupOutput, viteConfig)
+    const { viteConfig, serviteConfig } = await this.clientBuild()
 
     let pages: Page[] = []
 
@@ -158,10 +155,6 @@ class Builder {
 function emptyLine() {
   // eslint-disable-next-line no-console
   console.log("")
-}
-
-function getEntryUrl(rollupOutput: RollupOutput, viteConfig: ResolvedConfig) {
-  return path.join(viteConfig.base || "/", rollupOutput.output[0].fileName)
 }
 
 function getPrerenderRoutes(pages: Page[], { ssg, csr }: ServiteConfig) {

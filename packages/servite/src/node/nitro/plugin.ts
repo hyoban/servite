@@ -1,11 +1,13 @@
 import { isMainThread } from "worker_threads"
 
 import { H3Event } from "h3"
-import { build, createDevServer, Nitro, prepare } from "nitropack"
-import { Plugin, ResolvedConfig } from "vite"
+import { build, createDevServer, prepare } from "nitropack"
 
-import { ServiteConfig } from "../types.js"
 import { initNitro } from "./init.js"
+
+import type { ServiteConfig } from "../types.js"
+import type { Nitro } from "nitropack"
+import type { Plugin, ResolvedConfig } from "vite"
 
 export interface ServiteNitroPluginConfig {
   serviteConfig: ServiteConfig
