@@ -147,9 +147,6 @@ importers:
       react-router-dom:
         specifier: ^6.18.0
         version: 6.18.0(react-dom@18.2.0)(react@18.2.0)
-      react-ssr-prepass:
-        specifier: ^1.5.0
-        version: 1.5.0(react@18.2.0)
       ufo:
         specifier: ^1.3.1
         version: 1.3.1
@@ -169,9 +166,6 @@ importers:
       '@types/micromatch':
         specifier: ^4.0.4
         version: 4.0.4
-      '@types/nprogress':
-        specifier: ^0.2.2
-        version: 0.2.2
       '@types/react':
         specifier: ^18.2.34
         version: 18.2.34
@@ -1622,10 +1616,6 @@ packages:
     resolution: {integrity: sha512-TlgT8JntpcbmKUFzjhsyhGfP2fsiz1Mv56im6enJ905xG1DAYesxJaeSbGqQmAw8OWPdhyJGhGSQGKRNJ45u9w==}
     dependencies:
       undici-types: 5.26.5
-
-  /@types/nprogress@0.2.2:
-    resolution: {integrity: sha512-2wLrSJXLztGmr7wXwM0hA/wuIOY9DznVdd+ZFofHOiXcj9JnVt+2ZeLRJ7v5ZVlmheSkUOSg3Q3O4Ce7yji79A==}
-    dev: true
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
@@ -4876,14 +4866,6 @@ packages:
       react: '>=16.8'
     dependencies:
       '@remix-run/router': 1.11.0
-      react: 18.2.0
-    dev: false
-
-  /react-ssr-prepass@1.5.0(react@18.2.0):
-    resolution: {integrity: sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
       react: 18.2.0
     dev: false
 

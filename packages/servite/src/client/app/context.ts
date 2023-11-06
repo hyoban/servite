@@ -21,7 +21,7 @@ export function useAppState() {
 /**
  * get loader data
  */
-export function useLoaderData<T extends (...args: any) => any>(): Awaited<
+export function useLoaderData<T extends (...args: never) => unknown>(): Awaited<
   ReturnType<T>
 > {
   return useAppState().loaderData as Awaited<ReturnType<T>>

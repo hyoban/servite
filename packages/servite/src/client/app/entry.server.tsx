@@ -3,7 +3,6 @@ import { StaticRouter } from "react-router-dom/server"
 import { withBase, withoutTrailingSlash } from "ufo"
 import customRender from "virtual:servite/custom-server-render"
 
-// import ssrPrepass from 'react-ssr-prepass';
 import { createApp } from "./main.js"
 
 import type {
