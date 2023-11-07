@@ -56,6 +56,7 @@ class Builder {
                 rollupOptions: {
                   ...extraConfig?.build?.rollupOptions,
                   // add `nodeResolve` to fix resolve `chalk` package.json imports
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   plugins: [nodeResolve() as any],
                 },
               },
@@ -65,7 +66,7 @@ class Builder {
             viteConfig = config
 
             // Save servite config
-            serviteConfig = (getPlugin("servite").api as any).getServiteConfig()
+            serviteConfig = getPlugin("servite").api.getServiteConfig()
 
             // Save some config for generate bootstrap code and ssg
             ;({ outDir } = config.build)
@@ -77,7 +78,7 @@ class Builder {
           },
           async buildEnd() {
             // Save pages to prerender
-            pages = await (getPlugin("servite:pages").api as any).getPages()
+            pages = await getPlugin("servite:pages").api.getPages()
           },
         },
       ],

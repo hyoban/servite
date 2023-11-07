@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare": "nitropack prepare",
+    "prepare": "servite prepare",
     "dev": "vite",
     "build": "tsc && servite build",
     "preview": "vite preview"
