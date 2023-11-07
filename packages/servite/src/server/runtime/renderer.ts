@@ -3,12 +3,15 @@ import {
   useRuntimeConfig,
   useStorage,
 } from "#internal/nitro"
-import { EventHandler, getHeader, getQuery, H3Event } from "h3"
-import { RouteMatch } from "react-router-dom"
+import { getHeader, getQuery, H3Event } from "h3"
 import { parseURL } from "ufo"
 
 import ssrStylesCleanerCode from "../../prebuild/ssr-styles-cleaner.prebuilt.js"
-import {
+import { wrapViteId } from "../../shared/utils.js"
+import { renderPreloadLink, renderTag, trapConsole } from "./utils.js"
+import { collectRoutesStyles, getViteDevServer } from "./vite.js"
+
+import type {
   Route,
   SSRContext,
   SSRData,
@@ -16,9 +19,8 @@ import {
   SSREntryRenderContext,
   SSREntryRenderResult,
 } from "../../shared/types.js"
-import { wrapViteId } from "../../shared/utils.js"
-import { renderPreloadLink, renderTag, trapConsole } from "./utils.js"
-import { collectRoutesStyles, getViteDevServer } from "./vite.js"
+import type { EventHandler } from "h3"
+import type { RouteMatch } from "react-router-dom"
 
 const isDev = process.env.NODE_ENV === "development"
 

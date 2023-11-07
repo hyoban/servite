@@ -1,15 +1,11 @@
 import { defu } from "defu"
-import {
-  createNitro,
-  NitroConfig,
-  PublicAssetDir,
-  ServerAssetDir,
-} from "nitropack"
+import { createNitro } from "nitropack"
 import path from "upath"
 
 import { DIST_DIR } from "../constants.js"
-import { ServiteConfig } from "../types.js"
 
+import type { ServiteConfig } from "../types.js"
+import type { NitroConfig, PublicAssetDir, ServerAssetDir } from "nitropack"
 import type { InlineConfig, ResolvedConfig } from "vite"
 
 export interface CreateServiteNitroConfig {

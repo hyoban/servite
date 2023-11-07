@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react"
 
 import { ssrData } from "./constants.js"
-import { AppState } from "./types.js"
+
+import type { AppState } from "./types.js"
 
 export const appContext = createContext<AppState>({
   ...ssrData?.appState,

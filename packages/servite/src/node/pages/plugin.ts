@@ -1,14 +1,6 @@
 import fs from "fs-extra"
 import path from "upath"
-import {
-  HmrContext,
-  ModuleNode,
-  Plugin,
-  ResolvedConfig,
-  ViteDevServer,
-} from "vite"
 
-import { Page } from "../../shared/types.js"
 import {
   CUSTOM_SERVER_RENDER_MODULE_ID,
   PAGES_IGNORE_PATTERN,
@@ -20,9 +12,18 @@ import {
   RESOLVED_PAGES_ROUTES_MODULE_ID,
   SCRIPT_EXTS,
 } from "../constants.js"
-import { ServiteConfig } from "../types.js"
 import { shallowCompare } from "../utils.js"
 import { PagesManager, parsePageMeta } from "./manager.js"
+
+import type { Page } from "../../shared/types.js"
+import type { ServiteConfig } from "../types.js"
+import type {
+  HmrContext,
+  ModuleNode,
+  Plugin,
+  ResolvedConfig,
+  ViteDevServer,
+} from "vite"
 
 export interface ServitePagesPluginConfig {
   serviteConfig: ServiteConfig
@@ -165,7 +166,7 @@ export function servitePages({
     },
     api: {
       getPages: () => pagesManager.getPages(),
-    } as any,
+    },
   }
 }
 

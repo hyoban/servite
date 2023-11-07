@@ -1,20 +1,18 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 import fs from "fs-extra"
 import mm from "micromatch"
-import {
-  copyPublicAssets,
-  Nitro,
-  build as nitroBuild,
-  prepare,
-} from "nitropack"
-import { RollupOutput } from "rollup"
+import { copyPublicAssets, build as nitroBuild, prepare } from "nitropack"
 import path from "upath"
-import { InlineConfig, ResolvedConfig, build as viteBuild } from "vite"
+import { build as viteBuild } from "vite"
 
-import { Page } from "../../shared/types.js"
 import { SSR_ENTRY_FILE } from "../constants.js"
 import { initNitro } from "../nitro/init.js"
-import { ServiteConfig } from "../types.js"
+
+import type { Page } from "../../shared/types.js"
+import type { ServiteConfig } from "../types.js"
+import type { Nitro } from "nitropack"
+import type { RollupOutput } from "rollup"
+import type { InlineConfig, ResolvedConfig } from "vite"
 
 export async function build(inlineConfig: InlineConfig) {
   return new Builder(inlineConfig).build()

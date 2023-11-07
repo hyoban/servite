@@ -1,11 +1,11 @@
 import { useRuntimeConfig } from "#internal/nitro"
-import { RouteMatch } from "react-router-dom"
 import path from "upath"
 import { createServer } from "vite"
 
-import { Route } from "../../shared/types.js"
 import { lazyCachedFn } from "./utils.js"
 
+import type { Route } from "../../shared/types.js"
+import type { RouteMatch } from "react-router-dom"
 import type { ModuleNode } from "vite"
 
 const crawlFileUrlRE = /\.(js|jsx|ts|tsx|md|mdx)($|\?)/
