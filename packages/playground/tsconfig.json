@@ -1,5 +1,5 @@
 {
-  "extends": "./.nitro/types/tsconfig.json",
+  "extends": "./node_modules/.servite/types/tsconfig.json",
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
