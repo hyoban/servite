@@ -57,19 +57,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
             },
             noExternal: ["servite"],
           },
-          build: {
-            commonjsOptions: {
-              include: [
-                /react/,
-                /react-dom/,
-                /scheduler/,
-                /prop-types/,
-                /shallowequal/,
-                /invariant/,
-                /object-assign/,
-              ],
-            },
-          },
         }
       },
       async configureServer(server) {
@@ -88,7 +75,7 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
         getServiteConfig() {
           return serviteConfig
         },
-      } as any,
+      },
     },
     serviteHtml({ serviteConfig }),
     servitePages({ serviteConfig }),

@@ -18,8 +18,8 @@ export function randomKey(key: string) {
 }
 
 export function shallowCompare(
-  a: Record<string, any>,
-  b: Record<string, any>,
+  a: Record<string, unknown>,
+  b: Record<string, unknown>,
 ): boolean {
   const aKeys = Object.keys(a || {})
   const bKeys = Object.keys(b || {})

@@ -49,9 +49,6 @@ export async function initNitro({
       externals: {
         inline: [DIST_DIR, "servite/server"],
       },
-      typescript: {
-        generateTsConfig: false,
-      },
       virtual: {
         "virtual:servite/prod-ssr-entry": () => {
           if (nitroConfig?.dev || serviteConfig.csr) {
