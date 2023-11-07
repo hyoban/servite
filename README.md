@@ -23,8 +23,14 @@ export default defineConfig({
 })
 ```
 
-1. 添加 `"prepare": "nitropack prepare",` 到 package.json 的 scripts 中。
-1. 在 `tsconfig.json` 添加 `"extends": "./.nitro/types/tsconfig.json",`
+1. 添加 `"prepare": "servite prepare",` 到 package.json 的 scripts 中
+1. 将 `tsconfig.json` 修改为如下
+
+```jsonc
+{
+  "extends": "./.nitro/types/tsconfig.json"
+}
+```
 
 ## 如何定义路由
 
