@@ -24,7 +24,7 @@ export async function initNitro({
       baseURL: viteConfig.base,
       rootDir: viteConfig.root,
       srcDir: path.resolve(viteConfig.root, "src/server"),
-      buildDir: path.resolve(viteConfig.root, "node_modules/.servite"),
+      buildDir: path.resolve(viteConfig.root, ".nitro"),
       output: {
         dir: path.resolve(viteConfig.root, viteConfig.build.outDir, ".output"),
       },

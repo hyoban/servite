@@ -19,8 +19,7 @@ import type {
   SSREntryRenderContext,
   SSREntryRenderResult,
 } from "../../shared/types.js"
-import type { H3Event } from "h3"
-import type { EventHandler } from "h3"
+import type { EventHandler, H3Event } from "h3"
 import type { RouteMatch } from "react-router-dom"
 
 const isDev = process.env["NODE_ENV"] === "development"
@@ -112,10 +111,8 @@ async function loadTemplate(ssrContext: SSRContext) {
     const viteDevServer = await getViteDevServer()
 
     template = await viteDevServer.transformIndexHtml(
-      "/node_modules/.servite/index.html",
-      (await storage.getItem(
-        "root/node_modules/.servite/index.html",
-      )) as string,
+      "/.nitro/index.html",
+      (await storage.getItem("root/.nitro/index.html")) as string,
       ssrContext.url,
     )
   } else {
@@ -169,7 +166,6 @@ async function renderAssets(
 ): Promise<string> {
   if (isDev) {
     const devAssets =
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useRuntimeConfig()?.["serviteConfig"]?.csr
         ? []
