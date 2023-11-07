@@ -109,10 +109,8 @@ async function loadTemplate(ssrContext: SSRContext) {
     const viteDevServer = await getViteDevServer()
 
     template = await viteDevServer.transformIndexHtml(
-      "/node_modules/.servite/index.html",
-      (await storage.getItem(
-        "root/node_modules/.servite/index.html",
-      )) as string,
+      "/.nitro/index.html",
+      (await storage.getItem("root/.nitro/index.html")) as string,
       ssrContext.url,
     )
   } else {
@@ -167,7 +165,7 @@ async function renderAssets(
   if (isDev) {
     const devAssets =
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useRuntimeConfig()?.serviteConfig?.csr
+      useRuntimeConfig()?.["serviteConfig"]?.csr
         ? []
         : [
             // inject csr client entry

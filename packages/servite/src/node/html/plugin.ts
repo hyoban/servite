@@ -21,7 +21,7 @@ export function serviteHtml({
       }
 
       const root = path.resolve(config.root || "")
-      const target = path.resolve(root, "node_modules/.servite/index.html")
+      const target = path.resolve(root, ".nitro/index.html")
       const customHtmlFile = path.resolve(root, "src/index.html")
 
       if (fs.existsSync(customHtmlFile)) {
@@ -115,8 +115,7 @@ export function serviteHtml({
         Object.values(bundle).forEach((chunk) => {
           if (
             chunk.type === "asset" &&
-            path.normalize(chunk.fileName) ===
-              "node_modules/.servite/index.html"
+            path.normalize(chunk.fileName) === ".nitro/index.html"
           ) {
             chunk.fileName = "index.html"
           }
