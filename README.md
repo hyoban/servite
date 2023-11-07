@@ -23,7 +23,7 @@ export default defineConfig({
 })
 ```
 
-1. 在 `tsconfig.json` 添加 `"extends": "./node_modules/.servite/types/tsconfig.json",`
+1. 在 `tsconfig.json` 添加 `"extends": "./.nitro/types/tsconfig.json",`
 
 ## 如何定义路由
 
