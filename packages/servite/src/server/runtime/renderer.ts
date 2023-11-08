@@ -262,7 +262,6 @@ async function renderFullHtml(
 ) {
   const routeMatches = renderContext?.routeMatches || []
   let template = await loadTemplate(ssrContext)
-  console.log("template", template)
 
   const headPayload: SSRHeadPayload = renderContext?.headContext
     ? await renderSSRHead(renderContext.headContext)
