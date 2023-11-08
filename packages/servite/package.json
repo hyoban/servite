@@ -44,15 +44,13 @@
     "release": "bumpp && pnpm publish --access public --no-git-checks"
   },
   "devDependencies": {
-    "@types/babel__core": "^7.20.3",
     "@types/fs-extra": "^11.0.3",
     "@types/micromatch": "^4.0.4",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.14",
     "cpy": "^11.0.0",
     "esbuild": "^0.19.5",
-    "rollup": "^4.3.0",
-    "vite": "^4.5.0"
+    "rollup": "^4.3.0"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -77,6 +75,7 @@
     "nitropack": "^2.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.18.0"
+    "react-router-dom": "^6.18.0",
+    "vite": "^4.5.0"
   }
 }
