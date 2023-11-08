@@ -12,6 +12,7 @@ import { routes } from "virtual:servite/pages-routes"
 import { ErrorPage } from "./components/ErrorPage.js"
 import { isBrowser, ssrData } from "./constants.js"
 import { AppContext } from "./context.js"
+import { HeadContext } from "./head.js"
 import { PageError } from "./types.js"
 
 import type {
@@ -225,13 +226,15 @@ export async function createApp({
     }
 
     return (
-      <AppContext.Provider value={appState}>
-        {appState.pagePath ? (
-          <Suspense>{routeElement}</Suspense>
-        ) : appState.pageError ? (
-          <ErrorPage error={appState.pageError} />
-        ) : null}
-      </AppContext.Provider>
+      <HeadContext.Provider value={context.headContext}>
+        <AppContext.Provider value={appState}>
+          {appState.pagePath ? (
+            <Suspense>{routeElement}</Suspense>
+          ) : appState.pageError ? (
+            <ErrorPage error={appState.pageError} />
+          ) : null}
+        </AppContext.Provider>
+      </HeadContext.Provider>
     )
   }
 }
