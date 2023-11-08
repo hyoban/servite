@@ -23,6 +23,23 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
             alias: {
               "virtual:servite-dist": DIST_DIR,
             },
+            // Some packages (eg. invariant) will have abnormal situations in optimizeDeps,
+            // so here we set browserField: false and manually declare mainFields instead
+            mainFields: ["browser", "module", "jsnext:main", "jsnext"],
+            browserField: false,
+          },
+          optimizeDeps: {
+            exclude: [
+              "servite/client",
+              "virtual:servite-dist",
+              "virtual:servite",
+            ],
+          },
+          ssr: {
+            optimizeDeps: {
+              disabled: "build",
+            },
+            noExternal: ["servite"],
           },
         }
       },
