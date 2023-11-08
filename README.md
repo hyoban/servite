@@ -66,5 +66,4 @@ export default function Page() {
 
 ## 如何自定义 HTML
 
-1. 使用来自 [Unhead](https://unhead.unjs.io/) 的 `useHead` 函数
-1. 在 src 目录下创建自定义的 `index.html` 文件
+使用来自 [Unhead](https://unhead.unjs.io/) 的 `useHead` 函数
