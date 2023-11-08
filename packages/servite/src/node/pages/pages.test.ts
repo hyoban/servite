@@ -193,10 +193,42 @@ const NO_ROOT_LAYOUT2 = [
   },
 ]
 
+const ROOT_WITH_NESTED_PAGE3 = [
+  {
+    routePath: "/",
+    filePath: "src/app/layout.tsx",
+    isLayout: true,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/",
+    filePath: "src/app/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/hello",
+    filePath: "src/app/hello/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+  {
+    routePath: "/hello/world",
+    filePath: "src/app/hello/world/page.tsx",
+    isLayout: false,
+    is404: false,
+    meta: {},
+  },
+]
+
 const testGroup = {
   pageList1: pageList0,
   pageList2: ROOT_WITH_GROUP1,
   "no-root-layout": NO_ROOT_LAYOUT2,
+  "root-with-nested-page": ROOT_WITH_NESTED_PAGE3,
 }
 
 Object.entries(testGroup).forEach(([key, value], index) => {

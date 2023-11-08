@@ -26,8 +26,9 @@ export default function Page() {
 
   return (
     <div>
-      <h1>{a}</h1>
+      <h1>Root Page</h1>
       <p>{data.hello}</p>
+      <p>{a}</p>
       <button onClick={() => setA(a + 1)}>Click</button>
     </div>
   )

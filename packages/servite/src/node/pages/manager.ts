@@ -161,19 +161,7 @@ async function scanPages(
     )
   }
 
-  return (await Promise.all(serviteConfig.pagesDirs?.map(scan) ?? []))
-    .flat()
-    .sort((a, b) => {
-      const compareRes = a.routePath.localeCompare(b.routePath)
-      // layout first
-      if (compareRes === 0) {
-        if (a.isLayout && b.isLayout) {
-          return 0
-        }
-        return b.isLayout ? 0 : -1
-      }
-      return compareRes
-    })
+  return (await Promise.all(serviteConfig.pagesDirs?.map(scan) ?? [])).flat()
 }
 
 function resolveRoutePath(base: string, pageFile: string) {
@@ -253,6 +241,15 @@ function findParentRoute(routes: Route[], currentRoute: Route): Route | null {
       route.children &&
       !getRouteGroup(route.filePath) &&
       depth(route) + 1 === depth(currentRoute)
+    ) {
+      return route
+    }
+
+    if (
+      route.path === "/" &&
+      route.children &&
+      !getRouteGroup(route.filePath) &&
+      !currentRoute.children
     ) {
       return route
     }
