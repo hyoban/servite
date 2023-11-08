@@ -3,7 +3,7 @@ import {
   useRuntimeConfig,
   useStorage,
 } from "#internal/nitro"
-import { getHeader, getQuery, H3Event } from "h3"
+import { getHeader, getQuery } from "h3"
 import { parseURL } from "ufo"
 
 import ssrStylesCleanerCode from "../../prebuild/ssr-styles-cleaner.prebuilt.js"
@@ -19,7 +19,7 @@ import type {
   SSREntryRenderContext,
   SSREntryRenderResult,
 } from "../../shared/types.js"
-import type { EventHandler } from "h3"
+import type { EventHandler, H3Event } from "h3"
 import type { RouteMatch } from "react-router-dom"
 
 const isDev = process.env.NODE_ENV === "development"

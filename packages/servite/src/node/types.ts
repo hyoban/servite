@@ -38,10 +38,6 @@ export interface UserServiteConfig {
   }
 }
 
-type PartialRequired<T, K extends keyof T> = T & {
-  [P in K]-?: T[P]
-}
-
 export interface ServiteConfig extends UserServiteConfig {
   serverRenderFile?: string
 }

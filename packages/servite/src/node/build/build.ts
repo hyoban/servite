@@ -117,7 +117,7 @@ class Builder {
   build = async () => {
     // Client bundle
     const { rollupOutput, viteConfig, serviteConfig } = await this.clientBuild()
-    const clientEntryUrl = getEntryUrl(rollupOutput, viteConfig)
+    getEntryUrl(rollupOutput, viteConfig)
 
     let pages: Page[] = []
 
