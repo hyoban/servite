@@ -1,7 +1,7 @@
-import { Page, Route, SSREntryRender } from '../../shared/types';
+import type { Page, Route, SSREntryRender } from "../../shared/types"
 
-export const render: SSREntryRender;
+export declare const render: SSREntryRender
 
-export const pages: Page[];
+export declare const pages: Page[]
 
-export const routes: Route[];
+export declare const routes: Route[]
