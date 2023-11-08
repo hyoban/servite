@@ -35,7 +35,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
               "react/jsx-dev-runtime",
               "react-dom",
               "react-dom/client",
-              "servite > react-helmet-async",
             ],
             exclude: [
               "servite/client",

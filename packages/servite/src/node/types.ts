@@ -24,14 +24,6 @@ export interface UserServiteConfig {
   csr?: boolean
   baseHTML?: {
     /**
-     * @default 'Servite App'
-     */
-    title?: string
-    /**
-     * @default 'Servite App'
-     */
-    description?: string
-    /**
      * @default 'use-dark'
      */
     themeKey?: string

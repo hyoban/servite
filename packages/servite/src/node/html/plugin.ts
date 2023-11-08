@@ -47,26 +47,6 @@ export function serviteHtml({
       handler(html) {
         const htmlTags: HtmlTagDescriptor[] = []
 
-        // inject title and description
-        if (serviteConfig?.baseHTML?.title) {
-          htmlTags.push({
-            tag: "title",
-            injectTo: "head",
-            children: serviteConfig.baseHTML.title,
-          })
-        }
-
-        if (serviteConfig?.baseHTML?.description) {
-          htmlTags.push({
-            tag: "meta",
-            injectTo: "head",
-            attrs: {
-              name: "description",
-              content: serviteConfig.baseHTML.description,
-            },
-          })
-        }
-
         // inject theme inline script
         if (serviteConfig?.baseHTML?.themeKey) {
           htmlTags.push({

@@ -16,7 +16,10 @@ const basename = withoutTrailingSlash(import.meta.env.BASE_URL)
 export async function render(
   context: SSREntryRenderContext,
 ): Promise<SSREntryRenderResult> {
-  const { pathname } = context.ssrContext
+  const pathname = context.ssrContext?.pathname
+  if (!pathname) {
+    throw new Error("Missing pathname")
+  }
   const App = await createApp({ pagePath: pathname, context })
 
   const element = (

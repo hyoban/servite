@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Unhead } from "@unhead/schema"
 import type { H3Event } from "h3"
-import type { FilledContext } from "react-helmet-async"
 import type { RouteMatch } from "react-router-dom"
 
 export interface Page {
@@ -38,8 +39,8 @@ export interface AppState {
 }
 
 export interface SSREntryRenderContext {
-  ssrContext: SSRContext
-  helmetContext: Partial<FilledContext>
+  ssrContext?: SSRContext
+  headContext: Unhead
   routeMatches?: RouteMatch[]
   appState?: Pick<
     AppState,

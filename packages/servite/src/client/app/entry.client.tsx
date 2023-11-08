@@ -1,5 +1,6 @@
 import { createRoot, hydrateRoot } from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
+import { createHead } from "unhead"
 
 import { createApp } from "./main.js"
 
@@ -14,7 +15,12 @@ async function bootstrap() {
     throw new Error('[servite] Cannot find an element with id "root"')
   }
 
-  const App = await createApp({ pagePath })
+  const App = await createApp({
+    pagePath,
+    context: {
+      headContext: createHead(),
+    },
+  })
 
   const element = (
     <BrowserRouter basename={basename}>

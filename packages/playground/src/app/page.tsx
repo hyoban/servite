@@ -1,4 +1,5 @@
-import { Helmet, useLoaderData } from "servite/client"
+import { useState } from "react"
+import { useHead, useLoaderData } from "servite/client"
 
 import type { LoaderFunctionArgs } from "servite/client"
 
@@ -10,15 +11,24 @@ export function loader(context: LoaderFunctionArgs) {
 
 export default function Page() {
   const data = useLoaderData<typeof loader>()
+
+  const [a, setA] = useState(0)
+
+  useHead({
+    title: "My Page",
+    meta: [
+      {
+        name: "description",
+        content: "My page description",
+      },
+    ],
+  })
+
   return (
     <div>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>My Title</title>
-        <link rel="canonical" href="http://mysite.com/example" />
-      </Helmet>
-      <h1>Page</h1>
+      <h1>{a}</h1>
       <p>{data.hello}</p>
+      <button onClick={() => setA(a + 1)}>Click</button>
     </div>
   )
 }

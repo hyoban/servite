@@ -4,7 +4,7 @@ import { ssrData } from "./constants.js"
 
 import type { AppState } from "./types.js"
 
-export const appContext = createContext<AppState>({
+export const AppContext = createContext<AppState>({
   ...ssrData?.appState,
   routes: [],
   pages: [],
@@ -16,7 +16,7 @@ export const appContext = createContext<AppState>({
  * get app state
  */
 export function useAppState() {
-  return useContext(appContext)
+  return useContext(AppContext)
 }
 
 /**

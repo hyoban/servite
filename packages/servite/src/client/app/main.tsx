@@ -1,5 +1,4 @@
 import { Suspense, useEffect, useRef, useState } from "react"
-import { Helmet, HelmetProvider } from "react-helmet-async"
 import {
   matchPath,
   matchRoutes,
@@ -12,7 +11,8 @@ import { routes } from "virtual:servite/pages-routes"
 
 import { ErrorPage } from "./components/ErrorPage.js"
 import { isBrowser, ssrData } from "./constants.js"
-import { appContext } from "./context.js"
+import { AppContext } from "./context.js"
+import { UnheadContext } from "./head.js"
 import { PageError } from "./types.js"
 
 import type {
@@ -89,7 +89,7 @@ async function waitForPageReady({
     const loaderContext = createLoaderContext(context?.ssrContext)
     const shouldLoad =
       (!initial || !ssrData?.appState?.loaderData) &&
-      !(!context?.ssrContext.noSSR && isBrowser)
+      !(!context?.ssrContext?.noSSR && isBrowser)
 
     const results = await Promise.all(
       matches.map(async (match) => {
@@ -109,8 +109,8 @@ async function waitForPageReady({
     )
 
     const { pageModule, loaderData } = results.reduce<{
-      pageModule: any
-      loaderData?: Record<string, any>
+      pageModule: Record<string, unknown>
+      loaderData?: Record<string, unknown>
     }>(
       (res, { mod, loaderResult }) => {
         Object.assign(res.pageModule, mod)
@@ -185,10 +185,11 @@ export async function createApp({
 
   return function App() {
     const [appState, setAppState] = useState(initialAppState)
+
     const appStateRef = useRef(appState)
     appStateRef.current = appState
 
-    const routesElement = useRoutes(appState.routes, appState.pagePath)
+    const routeElement = useRoutes(appState.routes, appState.pagePath)
 
     const { pathname } = useLocation()
 
@@ -220,19 +221,20 @@ export async function createApp({
       }
     }, [appState])
 
+    if (!context?.headContext) {
+      throw new Error("headContext is required")
+    }
+
     return (
-      <HelmetProvider context={context?.helmetContext}>
-        <Helmet
-          defaultTitle={(isBrowser && document.title) || "Servite App"}
-        ></Helmet>
-        <appContext.Provider value={appState}>
+      <UnheadContext.Provider value={context.headContext}>
+        <AppContext.Provider value={appState}>
           {appState.pagePath ? (
-            <Suspense>{routesElement}</Suspense>
+            <Suspense>{routeElement}</Suspense>
           ) : appState.pageError ? (
             <ErrorPage error={appState.pageError} />
           ) : null}
-        </appContext.Provider>
-      </HelmetProvider>
+        </AppContext.Provider>
+      </UnheadContext.Provider>
     )
   }
 }

@@ -1,3 +1,4 @@
+import { renderSSRHead } from "@unhead/ssr"
 import {
   defineRenderHandler,
   useRuntimeConfig,
@@ -5,6 +6,7 @@ import {
 } from "#internal/nitro"
 import { getHeader, getQuery } from "h3"
 import { parseURL } from "ufo"
+import { createHead } from "unhead"
 
 import ssrStylesCleanerCode from "../../prebuild/ssr-styles-cleaner.prebuilt.js"
 import { wrapViteId } from "../../shared/utils.js"
@@ -19,12 +21,12 @@ import type {
   SSREntryRenderContext,
   SSREntryRenderResult,
 } from "../../shared/types.js"
+import type { SSRHeadPayload } from "@unhead/ssr"
 import type { EventHandler, H3Event } from "h3"
 import type { RouteMatch } from "react-router-dom"
 
 const isDev = process.env.NODE_ENV === "development"
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
 const storage = useStorage()
 
 export default <EventHandler>defineRenderHandler(async (event) => {
@@ -62,7 +64,6 @@ export default <EventHandler>defineRenderHandler(async (event) => {
 
 function isNoSSR(event: H3Event): boolean {
   const noSSR = Boolean(
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useRuntimeConfig()?.serviteConfig?.csr ||
       getQuery(event)["servite-no-ssr"] ||
       getHeader(event, "x-servite-no-ssr") ||
@@ -144,7 +145,7 @@ async function renderAppHtml(
 
   const renderContext: SSREntryRenderContext = {
     ssrContext,
-    helmetContext: {},
+    headContext: createHead(),
   }
 
   // Disable console while rendering in production
@@ -165,23 +166,21 @@ async function renderAssets(
   routeMatches: RouteMatch[],
 ): Promise<string> {
   if (isDev) {
-    const devAssets =
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useRuntimeConfig()?.["serviteConfig"]?.csr
-        ? []
-        : [
-            // inject csr client entry
-            renderTag({
-              tag: "script",
-              attrs: {
-                type: "module",
-                crossorigin: "",
-                src: wrapViteId(
-                  "virtual:servite-dist/client/app/entry.client.js",
-                ),
-              },
-            }),
-          ]
+    const devAssets = useRuntimeConfig()?.["serviteConfig"]?.csr
+      ? []
+      : [
+          // inject csr client entry
+          renderTag({
+            tag: "script",
+            attrs: {
+              type: "module",
+              crossorigin: "",
+              src: wrapViteId(
+                "virtual:servite-dist/client/app/entry.client.js",
+              ),
+            },
+          }),
+        ]
 
     if (!ssrContext.noSSR) {
       // Collect routes styles to avoid FOUC
@@ -263,50 +262,25 @@ async function renderFullHtml(
 ) {
   const routeMatches = renderContext?.routeMatches || []
   let template = await loadTemplate(ssrContext)
+  console.log("template", template)
 
-  const {
-    htmlAttributes,
-    bodyAttributes,
-    title,
-    priority,
-    meta,
-    link,
-    script,
-    style,
-  } = renderContext?.helmetContext?.helmet || {}
-
-  const htmlAttrs = htmlAttributes?.toString() || ""
-
-  if (htmlAttrs) {
-    template = template.replace("<html", `<html ${htmlAttrs}`)
-  }
-
-  const bodyAttrs = bodyAttributes?.toString()
-
-  if (bodyAttrs) {
-    template = template.replace("<body", `<body ${bodyAttrs}`)
-  }
+  const headPayload: SSRHeadPayload = renderContext?.headContext
+    ? await renderSSRHead(renderContext.headContext)
+    : ({} as SSRHeadPayload)
 
   // Assets
   const assets = await renderAssets(ssrContext, routeMatches)
 
-  const headTags = [
-    title,
-    priority,
-    meta,
-    link,
-    script,
-    style,
-    assets,
-    renderResult.headTags,
-  ]
+  const headTags = [assets, renderResult.headTags]
     .map((x) => x?.toString())
     .filter(Boolean)
     .join("\n    ")
 
-  if (headTags) {
-    template = template.replace("</head>", `  ${headTags}\n  </head>`)
-  }
+  headPayload.headTags += headTags
+
+  Object.entries(headPayload).forEach(([key, value]) => {
+    template = template.replace(`<!--${key}-->`, value)
+  })
 
   const ssrData: SSRData = {
     context: {
