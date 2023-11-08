@@ -10,13 +10,6 @@ import { servitePages } from "./pages/plugin.js"
 import type { UserServiteConfig } from "./types.js"
 import type { PluginOption } from "vite"
 
-const commonOptimizeDeps: string[] = [
-  "servite > react-helmet-async > prop-types",
-  "servite > react-helmet-async > react-fast-compare",
-  "servite > react-helmet-async > invariant",
-  "servite > react-helmet-async > shallowequal",
-]
-
 export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
   const serviteConfig = resolveServiteConfig(userServiteConfig)
 
@@ -43,7 +36,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
               "react-dom",
               "react-dom/client",
               "servite > react-helmet-async",
-              ...commonOptimizeDeps,
             ],
             exclude: [
               "servite/client",
@@ -54,7 +46,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
           ssr: {
             optimizeDeps: {
               disabled: "build",
-              include: commonOptimizeDeps,
             },
             noExternal: ["servite"],
           },
