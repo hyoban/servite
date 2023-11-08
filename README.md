@@ -43,7 +43,7 @@ export default defineConfig({
 在 page 或者 layout 文件中导出名为 `loader` 的函数，你可以结合 `useLoaderData` 来获取 loader 的返回值。
 
 ```tsx
-import { Helmet, useLoaderData } from "servite/client"
+import { useLoaderData } from "servite/client"
 
 import type { LoaderFunctionArgs } from "servite/client"
 
@@ -57,11 +57,6 @@ export default function Page() {
   const data = useLoaderData<typeof loader>()
   return (
     <div>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>My Title</title>
-        <link rel="canonical" href="http://mysite.com/example" />
-      </Helmet>
       <h1>Page</h1>
       <p>{data.hello}</p>
     </div>
@@ -71,25 +66,5 @@ export default function Page() {
 
 ## 如何自定义 HTML
 
-1. 如上，你可以使用 `Helmet` 来自定义 HTML
+1. 使用来自 [Unhead](https://unhead.unjs.io/) 的 `useHead` 函数
 1. 在 src 目录下创建自定义的 `index.html` 文件
-1. 在插件传递常用 html 模板参数
-
-```ts
-{
-  baseHTML?: {
-    /**
-     * @default 'Servite App'
-     */
-    title?: string
-    /**
-     * @default 'Servite App'
-     */
-    description?: string
-    /**
-     * @default 'use-dark'
-     */
-    themeKey?: string
-  }
-}
-```
