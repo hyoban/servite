@@ -20,9 +20,7 @@ export function lazyCachedFn<T>(fn: () => Promise<T>): () => Promise<T> {
  */
 export function trapConsole() {
   const consoleLog = global.console.log
-  global.console.log = (() => {
-    // ...
-  }) as any
+  global.console.log = () => {}
 
   return () => {
     global.console.log = consoleLog

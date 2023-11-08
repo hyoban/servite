@@ -23,16 +23,7 @@ export function serviteHtml({
 
       const root = path.resolve(config.root || "")
       const target = path.resolve(root, ".nitro/index.html")
-      const customHtmlFile = path.resolve(root, "src/index.html")
-
-      if (fs.existsSync(customHtmlFile)) {
-        if (fs.existsSync(target)) {
-          await fs.rm(target)
-        }
-        await fs.ensureLink(customHtmlFile, target)
-      } else {
-        await fs.copy(APP_HTML_FILE, target)
-      }
+      await fs.copy(APP_HTML_FILE, target)
 
       return {
         build: {
@@ -44,7 +35,7 @@ export function serviteHtml({
     },
     transformIndexHtml: {
       order: "pre",
-      handler(html) {
+      handler() {
         const htmlTags: HtmlTagDescriptor[] = []
 
         // inject theme inline script
@@ -62,17 +53,6 @@ export function serviteHtml({
                   document.documentElement.classList.toggle("dark", !0)
               })()
             `,
-          })
-        }
-
-        // inject div#root
-        if (!/<div.*?id=('|")root(\1)/.test(html)) {
-          htmlTags.push({
-            tag: "div",
-            attrs: {
-              id: "root",
-            },
-            injectTo: "body",
           })
         }
 

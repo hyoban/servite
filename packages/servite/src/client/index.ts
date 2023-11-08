@@ -2,7 +2,7 @@ import type { SSRContext } from "../shared/types"
 
 export { isBrowser, ssrData } from "./app/constants.js"
 export * from "./app/context.js"
-export * from "./app/head.js"
+export * from "unhead"
 export * from "./app/types.js"
 
 export type LoaderFunction<

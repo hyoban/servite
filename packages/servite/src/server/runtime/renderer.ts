@@ -275,10 +275,10 @@ async function renderFullHtml(
     .filter(Boolean)
     .join("\n    ")
 
-  headPayload.headTags += headTags
+  headPayload.headTags = headTags + "\n" + headPayload.headTags
 
   Object.entries(headPayload).forEach(([key, value]) => {
-    template = template.replace(`<!--${key}-->`, value)
+    template = template.replace(`$\{${key}\}`, value)
   })
 
   const ssrData: SSRData = {
