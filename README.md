@@ -24,6 +24,7 @@ export default defineConfig({
 ```
 
 1. 添加 `"prepare": "servite prepare",` 到 package.json 的 scripts 中
+1. 修改 `build` 脚本为 `"build": "servite build",`
 1. 将 `tsconfig.json` 修改为如下（需要注意从 nitro 提供的自动导入的 API 仅可以在 server 目录下使用）
 
 ```jsonc
