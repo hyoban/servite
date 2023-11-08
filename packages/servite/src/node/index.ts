@@ -10,13 +10,6 @@ import { servitePages } from "./pages/plugin.js"
 import type { UserServiteConfig } from "./types.js"
 import type { PluginOption } from "vite"
 
-const commonOptimizeDeps: string[] = [
-  "servite > react-helmet-async > prop-types",
-  "servite > react-helmet-async > react-fast-compare",
-  "servite > react-helmet-async > invariant",
-  "servite > react-helmet-async > shallowequal",
-]
-
 export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
   const serviteConfig = resolveServiteConfig(userServiteConfig)
 
@@ -30,33 +23,6 @@ export function servite(userServiteConfig?: UserServiteConfig): PluginOption[] {
             alias: {
               "virtual:servite-dist": DIST_DIR,
             },
-            // Some packages (eg. invariant) will have abnormal situations in optimizeDeps,
-            // so here we set browserField: false and manually declare mainFields instead
-            mainFields: ["browser", "module", "jsnext:main", "jsnext"],
-            browserField: false,
-          },
-          optimizeDeps: {
-            include: [
-              "react",
-              "react/jsx-runtime",
-              "react/jsx-dev-runtime",
-              "react-dom",
-              "react-dom/client",
-              "servite > react-helmet-async",
-              ...commonOptimizeDeps,
-            ],
-            exclude: [
-              "servite/client",
-              "virtual:servite-dist",
-              "virtual:servite",
-            ],
-          },
-          ssr: {
-            optimizeDeps: {
-              disabled: "build",
-              include: commonOptimizeDeps,
-            },
-            noExternal: ["servite"],
           },
         }
       },
