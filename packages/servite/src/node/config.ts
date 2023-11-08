@@ -10,8 +10,6 @@ export function resolveServiteConfig(
     ssg = false,
     csr = false,
     baseHTML = {
-      title: "Servite App",
-      description: "Servite App",
       themeKey: "use-dark",
     },
     ...rest
