@@ -8,16 +8,16 @@
     "ssg",
     "csr"
   ],
-  "author": "Codpoe <codpoe.me@gmail.com>",
+  "author": "hyoban <hi@hyoban.cc>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Codpoe/servite.git"
+    "url": "git+https://github.com/hyoban/servite.git"
   },
   "bugs": {
-    "url": "https://github.com/Codpoe/servite/issues"
+    "url": "https://github.com/hyoban/servite/issues"
   },
-  "homepage": "https://github.com/Codpoe/servite#readme",
+  "homepage": "https://github.com/hyoban/servite#readme",
   "type": "module",
   "files": [
     "bin",

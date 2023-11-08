@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Codpoe/servite.git"
+    "url": "git+https://github.com/hyoban/servite.git"
   },
   "bugs": {
-    "url": "https://github.com/Codpoe/servite/issues"
+    "url": "https://github.com/hyoban/servite/issues"
   },
   "type": "module",
   "scripts": {
