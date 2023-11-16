@@ -189,17 +189,29 @@ async function copyCsrHtml(viteConfig: ResolvedConfig, nitro: Nitro) {
  * Renderer will read server-assets by useStorage().getItem('/assets/servite/...')
  */
 async function copyServerAssets(viteConfig: ResolvedConfig) {
-  await Promise.all(
-    ["index.html", "ssr-manifest.json"].map((filePath) =>
-      fs.copy(
-        path.resolve(viteConfig.root, viteConfig.build.outDir, filePath),
-        path.resolve(
-          viteConfig.root,
-          viteConfig.build.outDir,
-          ".output/server-assets",
-          filePath,
-        ),
+  await Promise.all([
+    fs.copy(
+      path.resolve(viteConfig.root, viteConfig.build.outDir, "index.html"),
+      path.resolve(
+        viteConfig.root,
+        viteConfig.build.outDir,
+        ".output/server-assets",
+        "index.html",
       ),
     ),
-  )
+    fs.copy(
+      path.resolve(
+        viteConfig.root,
+        viteConfig.build.outDir,
+        ".vite",
+        "ssr-manifest.json",
+      ),
+      path.resolve(
+        viteConfig.root,
+        viteConfig.build.outDir,
+        ".output/server-assets",
+        "ssr-manifest.json",
+      ),
+    ),
+  ])
 }

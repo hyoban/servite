@@ -1,4 +1,5 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.experimental.useFlatConfig": true,
   "eslint.validate": ["typescript", "typescriptreact"],
   "eslint.workingDirectories": [{ "pattern": "packages/*/" }]
