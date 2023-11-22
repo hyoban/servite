@@ -5,8 +5,6 @@ import fs from "fs-extra"
 import { createNitro, writeTypes } from "nitropack"
 import colors from "picocolors"
 
-import { baseTypeScriptConfig } from "./nitro/init.js"
-
 const pkgPath = fileURLToPath(new URL("../../package.json", import.meta.url))
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"))
 
@@ -37,9 +35,6 @@ cli
   .action(async (root: string) => {
     const nitro = await createNitro({
       rootDir: root,
-      typescript: {
-        tsConfig: baseTypeScriptConfig,
-      },
     })
     await writeTypes(nitro)
   })
