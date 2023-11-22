@@ -2,7 +2,6 @@ import { fileURLToPath } from "url"
 
 import { cac } from "cac"
 import fs from "fs-extra"
-import { createNitro, writeTypes } from "nitropack"
 import colors from "picocolors"
 
 const pkgPath = fileURLToPath(new URL("../../package.json", import.meta.url))
@@ -28,15 +27,6 @@ cli
         process.exit(1)
       }
     }
-  })
-
-cli
-  .command("prepare [root]", "generate types for the project")
-  .action(async (root: string) => {
-    const nitro = await createNitro({
-      rootDir: root,
-    })
-    await writeTypes(nitro)
   })
 
 cli.parse()

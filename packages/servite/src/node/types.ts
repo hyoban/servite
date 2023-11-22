@@ -1,3 +1,5 @@
+import type { NitroConfig } from "nitropack"
+
 export interface PagesDir {
   base?: string
   dir: string
@@ -28,6 +30,11 @@ export interface UserServiteConfig {
      */
     themeKey?: string
   }
+  /**
+   * Nitro config
+   * @see https://github.com/unjs/nitro
+   */
+  nitro?: NitroConfig
 }
 
 export interface ServiteConfig extends UserServiteConfig {
