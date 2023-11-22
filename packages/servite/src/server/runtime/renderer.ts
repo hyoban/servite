@@ -265,7 +265,13 @@ async function renderFullHtml(
 
   const headPayload: SSRHeadPayload = renderContext?.headContext
     ? await renderSSRHead(renderContext.headContext)
-    : ({} as SSRHeadPayload)
+    : {
+        headTags: "",
+        bodyTags: "",
+        bodyTagsOpen: "",
+        htmlAttrs: "",
+        bodyAttrs: "",
+      }
 
   // Assets
   const assets = await renderAssets(ssrContext, routeMatches)
