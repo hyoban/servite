@@ -178,9 +178,26 @@ function getPrerenderRoutes(pages: Page[], { ssg, csr }: ServiteConfig) {
 }
 
 async function copyCsrHtml(viteConfig: ResolvedConfig, nitro: Nitro) {
-  await fs.copy(
+  let template = fs.readFileSync(
     path.resolve(viteConfig.root, viteConfig.build.outDir, "index.html"),
+    "utf-8",
+  )
+
+  const headPayload = {
+    headTags: "",
+    bodyTags: "",
+    bodyTagsOpen: "",
+    htmlAttrs: "",
+    bodyAttrs: "",
+  }
+
+  Object.entries(headPayload).forEach(([key, value]) => {
+    template = template.replace(`$\{${key}\}`, value)
+  })
+
+  fs.writeFileSync(
     path.resolve(nitro.options.output.publicDir, "index.html"),
+    template,
   )
 }
 
