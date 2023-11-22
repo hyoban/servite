@@ -19,31 +19,6 @@ export type TypeScriptConfig = Exclude<
   undefined
 >
 
-export const baseTypeScriptConfig: TypeScriptConfig = {
-  compilerOptions: {
-    esModuleInterop: true,
-    skipLibCheck: true,
-    target: "es2022",
-    verbatimModuleSyntax: true,
-    allowJs: true,
-    resolveJsonModule: true,
-    moduleDetection: "force",
-    strict: true,
-    noUncheckedIndexedAccess: true,
-
-    /* If NOT transpiling with TypeScript: */
-    moduleResolution: "Bundler",
-    module: "ESNext",
-    noEmit: true,
-
-    // in vite
-    useDefineForClassFields: true,
-    allowImportingTsExtensions: true,
-    lib: ["es2022", "dom", "dom.iterable"],
-    jsx: "preserve",
-  },
-}
-
 export async function initNitro({
   serviteConfig,
   viteConfig,
@@ -53,7 +28,7 @@ export async function initNitro({
     defu<NitroConfig, (NitroConfig | undefined)[]>(nitroConfig, {
       baseURL: viteConfig.base,
       rootDir: viteConfig.root,
-      srcDir: path.resolve(viteConfig.root, "src/server"),
+      srcDir: viteConfig.root,
       buildDir: path.resolve(viteConfig.root, ".nitro"),
       output: {
         dir: path.resolve(viteConfig.root, viteConfig.build.outDir, ".output"),
@@ -91,9 +66,6 @@ export const routes = [];
           )
           return `export * from '${ssrEntryPath}';`
         },
-      },
-      typescript: {
-        tsConfig: baseTypeScriptConfig,
       },
     }),
   )

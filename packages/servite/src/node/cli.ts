@@ -2,10 +2,8 @@ import { fileURLToPath } from "url"
 
 import { cac } from "cac"
 import fs from "fs-extra"
-import { createNitro, writeTypes } from "nitropack"
+import { createNitro, scanHandlers, writeTypes } from "nitropack"
 import colors from "picocolors"
-
-import { baseTypeScriptConfig } from "./nitro/init.js"
 
 const pkgPath = fileURLToPath(new URL("../../package.json", import.meta.url))
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"))
@@ -32,16 +30,10 @@ cli
     }
   })
 
-cli
-  .command("prepare [root]", "generate types for the project")
-  .action(async (root: string) => {
-    const nitro = await createNitro({
-      rootDir: root,
-      typescript: {
-        tsConfig: baseTypeScriptConfig,
-      },
-    })
-    await writeTypes(nitro)
-  })
+cli.command("prepare", "generate types for the project").action(async () => {
+  const nitro = await createNitro()
+  await scanHandlers(nitro)
+  await writeTypes(nitro)
+})
 
 cli.parse()
